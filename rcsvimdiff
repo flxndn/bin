@@ -1,0 +1,43 @@
+#!/bin/bash 
+
+# from http://singularity.be/2006/11/29/rcsvimdiff-or-vimrcsdiff/
+
+ver1=$1
+ver2=$2
+file=$3
+
+
+if [ "x$file" = "x" ]; then
+	echo "Usage: rcsvimdiff -rREV1 -rREV2 filename"
+	exit 0
+fi
+
+if [ ! -f $file ]; then
+   echo "File $file doesn't exist."
+   exit 1
+fi
+
+if [ ! -f $file,v -a ! -f `dirname $file`/RCS/`basename $file`,v ]; then
+   echo "File $file has no RCS history"
+   exit 1
+fi
+
+basefile=`basename $file`
+
+TMPDIR=/tmp/rcsvimdiff.$RANDOM$RANDOM$RANDOM
+
+for v in $ver1 $ver2; do
+	mkdir -p $TMPDIR$v || exit 1
+
+	cp -f $file $TMPDIR$v/
+	cp -f `dirname $file`/RCS/`basename $file`,v $TMPDIR$v/
+	cp -f $file,v $TMPDIR$v/
+
+	co -f $v $TMPDIR$v/$basefile
+done
+
+vimdiff $TMPDIR$ver1/$basefile $TMPDIR$ver2/$basefile
+
+for v in $ver1 $ver2; do
+	rm -rf $TMPDIR$v
+done

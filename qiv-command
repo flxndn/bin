@@ -1,0 +1,18 @@
+#!/bin/bash
+### syntax: qiv-command [pushed_number] [image_filename_with_full_path]
+
+case $1 in
+  0) exit;;
+  1) mogrify -rotate "-90" "$2"; exit;;
+  2) mogrify -rotate "90" "$2"; exit;;
+  3) gimp "$2";exit;;
+  4) pinta "$2";exit;;
+  5) jhead "$2";exit;;
+  6) gvim "$2.txt"; exit;;
+  7) exit;;
+  8) exit;;
+  9) exit;;
+  *) echo "Pulse una tecla del 0 al 9"; exit ;;
+esac
+ 
+

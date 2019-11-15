@@ -1,0 +1,406 @@
+Gestión UTE/mantenimiento/cpc/general	DONE: mirar el espacio ocupado por el SAIH y prever posible uso para backup.
+Gestión UTE/mantenimiento/cpc/web/Base de datos web se queda sin espacio PARA=Adolfo	DONE: Juanma. compactar base de datos.
+Gestión UTE/mantenimiento/cpc/web/Base de datos web se queda sin espacio PARA=Adolfo	TODO: 2010-09-08: 2010-07-03: 2010-04-21: Juanma.
+Gestión UTE/mantenimiento/cpc/Idor/Programa cliente	DONE: 2009-06-09: Félix: 2009-05-21. Hacer descripción funcional del Idor PARA=PilarForcada
+Gestión UTE/mantenimiento/cpc/Idor/Actualizar el listado de estaciones PARA=Adolfo	DONE: 2009-06-06: PilarForcada: 2009-06-04: PilarForcada. comprobar que puedo compilar.
+Gestión UTE/mantenimiento/cpc/Idor/Actualizar el listado de estaciones PARA=Adolfo	DONE: 2009-06-10: PilarForcada: 2009-06-04: Félix. Entrar en materia.
+Gestión UTE/mantenimiento/cpc/Idor/Varios	DONE: 2010-04-21: Anna Mayol.  comprobar que está funcionando el traspaso de datos.
+Gestión UTE/mantenimiento/cpc/Idor/Varios	DONE: 2010-05-08: monitorizacíón de conexiones al idor
+Gestión UTE/mantenimiento/cpc/SCADA	DONE: Hacer el traspaso en conjunción con Anna Mayol.
+Gestión UTE/mantenimiento/cpc/SCADA	DONE: informar a Adolfo
+Gestión UTE/mantenimiento/cpc/SCADA/Informe de señales con alta variabilidad	DELAYED: 2010-05-20: 2010-05-07: Adolfo. Preparar un informe de señales digitales que varíen demasiado.
+Gestión UTE/mantenimiento/cpc/SCADA/Informe de señales con alta variabilidad	INFO: No tienen que estar las COMU.
+Gestión UTE/mantenimiento/cpc/Clientes	DONE: Mirar a ver dónde hay que cambiarlo (SCADA? y la versión 2.0 ó 3.7?). Preguntar a Anna Mayol
+Gestión UTE/mantenimiento/cpc/Clientes	DONE: 2010-04-17. Adolfo. Instalar el FrameWork en los clientes que vayan a usar la aplicación. Operadores, cabezón y Adolfo. Versión 2.0
+Gestión UTE/mantenimiento/cpc/Frontends	DONE: 2010-04-17. Juanma.  Alarmas en los frontenes
+Gestión UTE/mantenimiento/ute	DONE: 2009-06-09: Félix: 2009-05-27: 2009-04-23. Comprobar la validez de las licencias Soft. PARA=Veglison
+Gestión UTE/mantenimiento/ute	DONE: comprobar la renovación del dominio
+Gestión UTE/mantenimiento/ute/Plan de backups PARA=JavierVeglison	DONE: 2009-06-12. Nacho.  Comprobar que se hace.
+Gestión UTE/proyectos/endesa PARA=Adolfo	DONE: (2009-05-14 18:07.49). preparar especificaciones funcionales
+Gestión UTE/proyectos/endesa PARA=Adolfo	DONE: 2009-06-04: Félix. retomarlo
+Gestión UTE/proyectos/endesa PARA=Adolfo	INFO: Sólo se guardan en IP21 las alturas que interesen.
+Gestión UTE/proyectos/endesa PARA=Adolfo	INFO: Utilizamos la señal que hemos leído para calcular el caudal.
+Gestión UTE/proyectos/endesa PARA=Adolfo	INFO: Hay que leer el fichero anterior para calcular la altura media de la primera hora.
+Gestión UTE/proyectos/endesa PARA=Adolfo	DONE: actualizar el programa con estas especificaciones
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	DONE: (2009-05-05 15:01:44). 2009-04-29: 2009-04-22. Hablar con PilarForcada
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	INFO: Enlace: http://www.wordreference.com/es/translation.asp?tranword=swivel
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	INFO: Lugar. http://195.55.247.237/saihebro/index.php?url=/informes/partes
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	DONE: (2009-05-05 15.01:47). PilarForcada. hacer modificaciones.
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	INFO: Se encarga LuisCarlosDeLaFuente de la web
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	INFO: Se encarga AnaMayol del Gestor
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	INFO: Tener cuidado con el fuente y con escribir en la base de datos
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	INFO: servidor web (smb/rdc:Administrador,SaEb159@10.31.241.137)
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	INFO: base de datos para web cheweb,cheweb@ 10.31.241.138
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	DONE: (2009-05-25 12:13:52). : 2009-05-21: mirar a ver cómo está
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	DONE: 2009-06-12: Felix: que AnaMayol prepare el gestor
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	DONE: 2009-06-12: Felix: LuisCarlosDeLaFuente. 2009-05-09: pedir a LuisCarlosDeLaFuente lo del sistema de directorios para meter informes
+Gestión UTE/proyectos/web/Meter enlace a informe pluviométrico PARA=Adolfo	DONE: 2009-06-18: 2009-06-10: Félix: 2009-06-02: 2009-05-21: 2009-05-09: enviar a BCN para que lo suban
+Gestión UTE/proyectos/web/Incluir mapas de pluviometria múltiples y animados PARA=Adolfo	DONE: (2009-05-14 10:53:41). conseguir acceso a ficheros
+Gestión UTE/proyectos/web/Incluir mapas de pluviometria múltiples y animados PARA=Adolfo	DONE: 2009-06-04: Félix: 2009-05-21: Preparar una maqueta
+Gestión UTE/proyectos/web/Incluir mapas de pluviometria múltiples y animados PARA=Adolfo	DONE: 2010-04-30: Hacer una especificaciones para Anna Mayol
+Gestión UTE/proyectos/web/Incluir mapas de pluviometria múltiples y animados PARA=Adolfo	DONE: Integrar la maqueta en el servidor.
+Gestión UTE/proyectos/sistema de claves ágil	DELAYED: ---
+Gestión UTE/proyectos/instalación de Framework para SCADA 3.7 PARA=PilarForcada	DELAYED: 2009-06-18: Félix: 2009-06-09: Félix: 2009-05-18: 2009-04-23: 2009-04-10: 2009-04-05: 2009-04-03: Llamar a a CarmenBelío para ver qué hay que hacer
+Gestión UTE/proyectos/instalación de Framework para SCADA 3.7 PARA=PilarForcada	DONE: 2010-04-17: Miguel Alemany. Tiene ya las instrucciones.
+Gestión UTE/proyectos/maximo 	TODO: 2010-06-25: cambios en los informes PARA=Zamora
+Gestión UTE/proyectos/maximo 	DONE: 2010-04-28: Aguilar. Dejamos que Allegro pueda entrar a solucionar incidencia. Usuarios que no sólo cambian estado sino por asignaciones en su bandeja de entrada.
+Gestión UTE/proyectos/maximo 	DONE: 2010-04-28: Nacho. Comprobar codificación de correos
+Gestión UTE/proyectos/maximo 	DONE: 2010-04-24: Nacho. copia del correo con el fallo de fechas en maximo dentro del flujo.
+Gestión UTE/proyectos/maximo 	DONE: 2010-04-24: Nacho. Provocar envio de correo de maximo a los 3 para que vean cómo se envía el correo
+Gestión UTE/proyectos/maximo 	DONE: 2010-04-24: ot genérica para tonterías
+Gestión UTE/proyectos/maximo 	DONE: 2010-04-24: 2010-04-17: Nacho. Maximo informe con requisitorias
+Gestión UTE/proyectos/maximo 	DONE: 2010-04-24: 2010-04-17: Nacho. Informe maximo Alaiz
+Gestión UTE/proyectos/maximo 	TODO: 2010-06-25: factura del conmutador de kvm
+Gestión UTE/proyectos/maximo 	DONE: 2010-04-28: Pili. 2010-04-21: José Vicente Aguilar. Oferta de Allegro para el servicio técnico de Maximo.
+Gestión UTE/proyectos/SGRWIN PARA=JavierAlaiz	INFO: documento encontrado por Nieves
+Gestión UTE/proyectos/SGRWIN PARA=JavierAlaiz	DONE: 2009-06-09: Félix: 2009-05-26: 2009-05-16: 2009-04-29: 2009-04-21: 2009-04-11: 2009-03-32: Buscar qué hay que hacer.
+Gestión UTE/proyectos/SGRWIN PARA=JavierAlaiz	DONE: Preguntar a Juanma por un equipo con este nombre y clave 'NOKIA'.
+Gestión UTE/proyectos/pdas PARA=JavierAlaiz	DONE: 2009-04-21  8:47:03. 2009-04-21: 2009-04-11: 2009-03-32: estudiar
+Gestión UTE/proyectos/pdas PARA=JavierAlaiz	DONE: Estudiar la documentación.
+Gestión UTE/proyectos/pdas PARA=JavierAlaiz	DONE: (2009-04-27 10:09:18). 2009-04-23: OscarNaval. Llamar a Digital Storm para programar una reunión de trabajo.
+Gestión UTE/proyectos/pdas PARA=JavierAlaiz	DONE: (2009-04-30 12:09:43). Buscar Geosphere/Yeti
+Gestión UTE/proyectos/pdas PARA=JavierAlaiz	DONE: (2009-06-11 13:20:57): 2009-06-09: Félix: 2009-05-21: OscarNaval. (2009-05-14  9:20:08). Llamar a OscarNaval, Digital Storm.
+Gestión UTE/proyectos/pdas PARA=JavierAlaiz	INFO: Telf. Digital Storm 626697272
+Gestión UTE/proyectos/pdas PARA=JavierAlaiz	DONE: 2009-06-13: Félix: Comprobar que lo ha enviado
+Gestión UTE/proyectos/pdas PARA=JavierAlaiz	DONE: 2009-06-09: Félix: 2009-05-21: 2009-05-05: Buscar  PDAMan
+Gestión UTE/proyectos/pdas PARA=JavierAlaiz	DONE: 2009-06-09: Félix: 2009-05-21: 2009-05-06: Instalar PDAMan
+Gestión UTE/proyectos/renovación del hardware del cpc PARA=JavierVeglison	DONE: 2009-06-13: 2009-06-06: PilarForcada: PilarForcada: Acelerar el proyecto.
+Gestión UTE/proyectos/renovación del hardware del cpc PARA=JavierVeglison	DONE: 2010-04-17: Veglison. Renovar garantías de los servidores por un año.
+Gestión UTE/proyectos/InfoPlus 21/Cálculos	DONE: 2010-04-17. Adolfo. Mail con una señal que no calcula bien. Calcular la media diaria dividiendo por el número de quinceminutales correctos (en algún caso no será 96).
+Gestión UTE/proyectos/InfoPlus 21/Cálculos	DONE: 2010-04-26: Preparar viaje a Barcelona para el 2010-04-27 si está disponible Carmen Belio. Pilar Forcada
+Gestión UTE/proyectos/InfoPlus 21/Cálculos	DONE: 2010-04-24: Mirar a ver qué se hace con las señales que no se pueden calcular en el presente, su valor actual se podrá calcular con valores futuros.
+Gestión UTE/reuniones/2010-04-10 10.00/meta	INFO: Lugar: CHE
+Gestión UTE/reuniones/2010-04-10 10.00/meta	INFO: Participantes: Adolfo, Pilar Forcada, Anna Mayol, Yo, Guillermo y Nacho (sólo en animación pluviometría)
+Gestión UTE/reuniones/2010-04-10 10.00/Mapas pluviométricos	INFO: Se usará el método de JavaScript
+Gestión UTE/reuniones/2010-04-10 10.00/Mapas pluviométricos	INFO: 2 mapas animados, PACUM y PHora
+Gestión UTE/reuniones/2010-04-10 10.00/Mapas pluviométricos	INFO: Se podrá acceder a los últimos 7 días
+Gestión UTE/reuniones/2010-04-10 10.00/Mapas pluviométricos	INFO: todo: Hacer una especificaciones para Anna Mayol
+Gestión UTE/reuniones/2010-04-10 10.00/Ficheros de ENDESA	INFO: Sólo se guardan en IP21 las alturas que interesen.
+Gestión UTE/reuniones/2010-04-10 10.00/Ficheros de ENDESA	INFO: Utilizamos la señal que hemos leído para calcular el caudal.
+Gestión UTE/reuniones/2010-04-10 10.00/Ficheros de ENDESA	INFO: Hay que leer el fichero anterior para calcular la altura media de la primera hora.
+Gestión UTE/reuniones/2010-04-10 10.00/HW	INFO: todo: Renovar garantías de los servidores por un año.
+Gestión UTE/reuniones/2010-04-10 10.00/Traspasos	INFO: Visión general de los traspasos actuales, para no perder las perspectiva.
+Gestión UTE/reuniones/2010-04-10 10.00/Traspasos	INFO: todo: Hacer el traspaso en conjunción con Anna Mayol.
+Gestión UTE/reuniones/2010-04-10 10.00/Traspasos	INFO: Parar @SRV-SCA-01/Grupo Cluster Util/ServicioBackupMysql. No parar el traspaso de digitales.
+Gestión UTE/reuniones/2010-04-10 10.00/Cáculos	INFO: Cálculo por tiempos.
+Gestión UTE/reuniones/2010-04-10 10.00/Cáculos	INFO: Las fórmulas tienen que ver si les falta algún dato dependiente.
+Gestión UTE/reuniones/2010-04-10 10.00/Cáculos	INFO: wait 2010-04-17: Adolfo. Mail con una señal que no calcula bien. Calcular la media diaria dividiendo por el número de quinceminutales correctos (en algún caso no será 96).
+Gestión UTE/reuniones/2010-04-10 10.00/Cáculos	INFO: todo: Preparar viaje a Barcelona para el 2010-04-27 si está disponible Carmen Belio. Pilar Forcada
+Gestión UTE/reuniones/2010-04-10 10.00/Cáculos	INFO: todo: Mirar a ver qué se hace con las señales que no se pueden calcular en el presente, su valor actual se podrá calcular con valores futuros.
+Gestión UTE/reuniones/2010-04-10 10.00/FrameWork	INFO: todo: Mirar a ver dónde hay que cambiarlo (SCADA? y la versión 2.0 ó 3.7?). Preguntar a Anna Mayol
+Gestión UTE/reuniones/2010-04-10 10.00/FrameWork	INFO: todo: Instalar el FrameWork en los clientes que vayan a usar la aplicación. Operadores, cabezón y Adolfo. Versión 2.0
+Gestión UTE/reuniones/2010-04-10 10.00/Calidades	INFO: Anna Mayol realizará el cambio de calidades con una traducción de numcalidad a numcalidadvalidado siempre que el valor inicial de numcalidadvalidado no de información.
+Gestión UTE/reuniones/2010-04-10 10.00/Alarmas señales digitales	INFO: todo: Preparar un informe de señales digitales que varíen demasiado.
+Gestión UTE/reuniones/2010-04-19 10.08/meta	INFO: lugar: CHE
+Gestión UTE/reuniones/2010-04-19 10.08/meta	INFO: Participantes: Veglison, Alaiz, Racionero, Yo, Adolfo, Tabueña, Aguilar
+Gestión UTE/reuniones/2010-04-19 10.08/meta	INFO: Tema: Mejoras propuestas, acepto/rechazo
+Gestión UTE/reuniones/2010-04-19 10.08/Maximo	INFO: renovación mantenimiento, eliminar usuarios sin entradas en su bandeja.
+Gestión UTE/reuniones/2010-04-19 10.08/Renovación Hardware	INFO: 
+Gestión UTE/reuniones/2010-04-19 10.08/Adquisición de datos no quinceminutales	INFO: 
+Gestión UTE/reuniones/2010-04-19 10.08/Bases de datos de respaldo	INFO: 
+Gestión UTE/reuniones/2010-04-19 10.08/Energía	DONE: Buscar información sobre pilas de combustible. -> Racionero
+Gestión UTE/reuniones/2010-06-14 12.00	INFO: Reunión propuesta por Adolfo por la mañana
+Gestión UTE/reuniones/2010-06-14 12.00	INFO: Asistentes: Adolfo, Juanma Yo
+Gestión UTE/reuniones/2010-06-14 12.00/Evolución pluviométrica	DONE: las secuencias deben ir desde la 1 a las 24
+Gestión UTE/reuniones/2010-06-14 12.00/Evolución pluviométrica	DONE: Las llamadas a los mapas serán con subpestañas. Última hora, animación y Día, Evolución
+Gestión UTE/reuniones/2010-06-14 12.00/Evolución pluviométrica	DONE: Generarlos antes de que se pidan
+Gestión UTE/reuniones/2010-06-14 12.00/Evolución pluviométrica	DONE: Arreglar el problema de los mapas de las 02:00.
+Gestión UTE/reuniones/2010-06-14 12.00/Renovación mapas de sergio	DONE: Mapas sin áreas sensibles, actualizar de acuerdo con él
+Gestión UTE/reuniones/2010-06-14 12.00/Renovación mapas de sergio	DONE: Mapas sensibles, mirar a ver cómo se hace y actualizarlos de acuerdo con BCN
+Gestión UTE/reuniones/2010-06-14 12.00/Maximo->SCADA	INFO: Datos pasan a MYSQL/observados
+Gestión UTE/reuniones/2010-06-14 12.00/Maximo->SCADA	DONE: Mirar a ver las etiquetas que hay en maximo
+Gestión UTE/reuniones/2010-06-14 12.00/Maximo->SCADA	DONE: relacionar la tarea con la medición
+Gestión UTE/reuniones/2010-06-14 12.00/Maximo->SCADA	DONE: relacionar tarea con el cálculo del tiempo de la medida (linnigramas)
+Gestión UTE/reuniones/2010-06-14 12.00/Alarmas->Maximo	DELAYED: Hasta que tengamos la nueva versión
+Gestión UTE/reuniones/2010-06-14 12.00/Cálculos	TODO: Pasar todos los que dependan de una variable a COS
+Gestión UTE/reuniones/2010-06-14 12.00/Cálculos	TODO: Optimizar los que faltan
+Gestión UTE/reuniones/2010-06-14 12.00/Alarmas tempranas	TODO: Estudiar las querys de Anna
+Gestión UTE/reuniones/2010-06-14 12.00/Clientes SCADA	DONE: Desmontar
+Gestión UTE/bitácora/2010/2010-02-22 09.13/Yo	DONE: Zamora: Buscar los solicitantes de estas notas - 499051: ATARES - 499087: ATARES - 509560: TETRA Enviado correo: 2010-02-22 10:04
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Yo	DONE: Prototipo python y C
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Yo	DONE: Llevarme el servidor
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Yo	DONE: scrum
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Nacho	DONE: Scada de Eduardo
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Nacho	DONE: Portátil que no arranca
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Nacho	DONE: Maximo informe con requisitorias
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Nacho	DONE: Maximo pasar a producción varios campos obligatorios
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Nacho	DONE: Reinstalar los programas del Editor
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Nacho	DONE: Preparar conexión SSH.
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Adolfo	DONE: ¿están bien los tags que me han pasado?
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Adolfo	DONE: Fórmula Canelles 370.4 coger SantaAna.cota ¿más o menos de 370.4?
+Gestión UTE/bitácora/2010/2010-02-23 10.07/Manuel	DONE: factura del conmutador de kvm
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Yo	DONE: Integrar el programa en VC 6.0
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Yo	DONE: Llamar a roberto
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Yo	DONE: lanzar incidencia de ratón en Idor
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Nacho	DONE: Maximo pasar a producción varios campos obligatorios
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Nacho	DONE: Preparar conexión SSH.
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Juanma 	DONE: pedir presupuestos
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Juanma 	DONE: cáculos de embalses
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Juanma 	DONE: copias de seguridad de contabilidad
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Juanma 	DONE: planning de guardias
+Gestión UTE/bitácora/2010/2010-02-25 11.51/Manuel	DONE: Planning de guardias
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Yo	DONE: repasar estructura de tablas para Geiser
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Yo	DONE: Integrar el programa en VC 6.0
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Yo	DONE: Llamar a roberto
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Yo	DONE: lanzar incidencia de ratón en Idor
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Nacho	DONE: Instalar SCADA en Tudela
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Nacho	DONE: Maximo informe con requisitorias
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Nacho	DONE: Maximo pasar a producción varios campos obligatorios
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Nacho	DONE: Preparar conexión SSH.
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Juanma 	DONE: pedir presupuestos
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Juanma 	DONE: incidencias en común
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Juanma 	DONE: cáculos de embalses
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Juanma 	DONE: copias de seguridad de contabilidad
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Juanma 	DONE: planning de guardias
+Gestión UTE/bitácora/2010/2010-03-01 14.11/Manuel	DONE: Planning de guardias
+Gestión UTE/bitácora/2010/2010-03.22 17.01/Yo	DONE: Propuestas de informática
+Gestión UTE/bitácora/2010/2010-03.22 17.01/Yo	DONE: revisar señales perdidas. Preguntar por los resultados '>>>>'
+Gestión UTE/bitácora/2010/2010-03-25/Yo	DONE: replanteo pdas
+Gestión UTE/bitácora/2010/2010-02-26/Yo	DONE: ip21. Hacer un mini archivo y revisar paso a paso
+Gestión UTE/bitácora/2010/2010-02-26/Yo	DONE: mejoras generales soft
+Gestión UTE/bitácora/2010/2010-02-26/Esperando/Nacho	DONE: eliminar OTs de Logroño
+Gestión UTE/bitácora/2010/2010-03-29/Yo	DONE: Que los usuarios de Geiser puedan hacer events.
+Gestión UTE/bitácora/2010/2010-03-29/Yo	DONE: ip21. Hacer un mini archivo de uno que dependa de otro embalse
+Gestión UTE/bitácora/2010/2010-03-29/Yo	DONE: ip21. Hacer un mini archivo de uno que dependa de otro embalse y de una cota
+Gestión UTE/bitácora/2010/2010-03-29/Yo	DONE: guardar un día precipitaciones horarias
+Gestión UTE/bitácora/2010/2010-03-29/Yo	DONE: guardar un día precipitaciones acumuladas
+Gestión UTE/bitácora/2010/2010-04.08/Yo	DONE: Hacer un vídeo precipitaciones horarias
+Gestión UTE/bitácora/2010/2010-04.08/Yo	DONE: Hacer un vídeo precipitaciones acumuladas
+Gestión UTE/bitácora/2010/2010-04.08/Yo	DONE: Eliminar logs tontos y poner más serios.
+Gestión UTE/bitácora/2010/2010-04.08/Esperando/Nacho	DONE: Maximo. Aviso de tareas próximas a finalizar
+Gestión UTE/bitácora/2010/2010-04-30/Juanma	DONE: revisar qué hay que hacer con los cálculos, revisar los críticos
+Gestión UTE/bitácora/2010/2010-04-30/Yo 	DONE: Mirar la intranet 
+Gestión UTE/bitácora/2010/2010-04-30/Yo 	DONE: instalación de tsk_fch (Endesa) acelerarlo
+Gestión UTE/bitácora/2010/2010-04-30/Yo 	DONE: documento animación + como trabajo (acceso y forma de trabajar y dejarlo como prueba)
+Gestión UTE/bitácora/2010/2010-04-30/Nacho	DONE: Estado Maximo
+Gestión UTE/bitácora/2010/2010-04-30/Adolfo	DONE: Informe maximo
+Gestión UTE/bitácora/2010/2010-04-30/Adolfo	DONE: Informe señales que varían (dónde lo pongo)
+Gestión UTE/bitácora/2010/2010-05-12/Mantenimiento	DONE: huecos en los datos en SCADA, en A017. mirarlo con Paco Gago
+Gestión UTE/bitácora/2010/2010-05-12/Mantenimiento	DONE: 2010-05-13: Comprobar que se han rellenado.
+Gestión UTE/bitácora/2010/2010-05-12/Mantenimiento	DONE: FE El Grado caído. Reiniciar. Reinstalar servicios.
+Gestión UTE/bitácora/2010/2010-05-12/Maximo	DONE: Arreglar la query para que funcione bien.
+Gestión UTE/bitácora/2010/2010-05-12/Maximo	DONE: Que sume correctamente.
+Gestión UTE/bitácora/2010/2010-05-12/Maximo	DONE: pasárselo a Alaiz
+Gestión UTE/bitácora/2010/2010-05-12/Maximo	DONE: Que no salgan las sub-sub tareas
+Gestión UTE/bitácora/2010/2010-05-12/Maximo	DONE: Rehacer completamente
+Gestión UTE/bitácora/2010/2010-05-12/Mapas	DONE: ámbito para smartphones (320x480)
+Gestión UTE/bitácora/2010/2010-05-12/Cálculos	DONE: 2010-05-18: 2010-05-15: 2010-05-13: Listado con fórmula, descripcion, uso de valor actual o primer histórico, una señal o varias, de una remota o de varias
+Gestión UTE/bitácora/2010/2010-05-13/Mapas	DONE: Documentar proceso de borrado
+Gestión UTE/bitácora/2010/2010-05-13/Ficheros Endesa	DONE: Enviar fichero configuración y proyecto completo a Anna
+Gestión UTE/bitácora/2010/2010-05-18/Informes maximo	DONE: Informe de kms
+Gestión UTE/bitácora/2010/2010-05-18/Mantenimiento Redhat	DELAYED: Arreglar yum
+Gestión UTE/bitácora/2010/2010-05-26/Mantenimiento SCADA	DONE: 2010-05-27: Juanma. Arreglar los datos que faltan en E046
+Gestión UTE/bitácora/2010/2010-05-26/web/animación	DONE: Programa que borre los mapas viejos.
+Gestión UTE/bitácora/2010	2010-06-02:
+Gestión UTE/bitácora/2010	DONE: Añadir el campo EMBALSE_TAG
+Gestión UTE/bitácora/2010	2010-06-03:
+Gestión UTE/bitácora/2010//ENDESA	DONE: Añadir el campo FACTOR_FIJO
+Gestión UTE/bitácora/2010//ENDESA	DONE: Enviar el documento actualizado
+Gestión UTE/bitácora/2010//ENDESA	DONE: hacerlo por tramos
+Gestión UTE/bitácora/2010//Evolución pluviométrica	DONE: Enviar enlaces de los frames
+Gestión UTE/bitácora/2010//Evolución pluviométrica	DONE: Mirar a ver qué pasa con las imágenes
+Gestión UTE/bitácora/2010//Evolución pluviométrica	DONE: Guardar como jpeg en la cache
+Gestión UTE/bitácora/2010//Evolución pluviométrica	DONE: poner los controles donde no molesten
+Gestión UTE/bitácora/2010//Evolución pluviométrica	DONE: que se vea la hora como html
+Gestión UTE/bitácora/2010//Evolución pluviométrica/Hacer maqueta más completa	DONE: Intranet
+Gestión UTE/bitácora/2010//Evolución pluviométrica/Hacer maqueta más completa	DONE: Internet
+Gestión UTE/bitácora/2010/2010-06-04/ENDESA	DONE: hacerlo por tramos
+Gestión UTE/bitácora/2010/2010-06-07/ENDESA	DONE: hacer algo con parametro umbral
+Gestión UTE/bitácora/2010/2010-06-07/Maximo	DONE: que aparezzan MP en actuate/informe horas empleado.
+Gestión UTE/bitácora/2010/2010-06-07/Maximo	DONE: que aparezca la descripción de la tarea
+Gestión UTE/bitácora/2010/2010-06-07/Evolución pluviométrica	DONE: quitar el texto de debug
+Gestión UTE/bitácora/2010/2010-06-07/Evolución pluviométrica	DONE: imágenes internet proporcionadas y con fondo azulito
+Gestión UTE/bitácora/2010/2010-06-07/Mantenimiento	DONE: Solucionar el axis del P007, la radio va pero no se ve el axis
+Gestión UTE/bitácora/2010/2010-06-08/Evolución pluviométrica	DONE: comprobar en explorer 7 la aparición de scrolls
+Gestión UTE/bitácora/2010/2010-06-08/Evolución pluviométrica	DONE: Dejarlo bonito
+Gestión UTE/bitácora/2010/2010-06-10/Maximo	DONE: Eliminar las órdenes GEN en los informes cuadro de manda e indicadores
+Gestión UTE/bitácora/2010/2010-06-14/Evolución pluviométrica	DONE: 2010-06-12: Adolfo. Cambio la secuencia de horas
+Gestión UTE/bitácora/2010/2010-06-14/Evolución pluviométrica	DONE: 2010-06-12: Adolfo. thumbnails para los días
+Gestión UTE/bitácora/2010/2010-06-14/Mapas de sergio	DONE: preg. Adolfo. como lo hacemos, que datos pasamos, a quien
+Gestión UTE/bitácora/2010/2010-06-14/Maximo -> SCADA	DONE: preg. Adolfo. se puede pasar mediante EQNUM, description y valor medido mediante un fichero diccionario
+Gestión UTE/bitácora/2010/2010-06-14/Alarmas -> Maximo	DONE: preg. Adolfo. Fuentes del programa
+Gestión UTE/bitácora/2010/2010-06-14/Alarmas -> Maximo	DONE: preg. Adolfo. Backend (o bd)
+Gestión UTE/bitácora/2010/2010-06-14/Alarmas -> Maximo	DONE: preg. Adolfo. ing. inversa de las tablas de maximo
+Gestión UTE/bitácora/2010/2010-06-15/Renovación mapas de sergio	DONE: Mapas sin áreas sensibles, actualizar de acuerdo con él
+Gestión UTE/bitácora/2010/2010-06-15/Evolución pluviométrica	DONE: Las llamadas a los mapas serán con subpestañas. Última hora, animación y Día, Evolución
+Gestión UTE/bitácora/2010/2010-06-15/Evolución pluviométrica	DONE: 2010-06-16: Generarlos antes de que se pidan
+Gestión UTE/bitácora/2010/2010-06-15/Evolución pluviométrica	DONE: 2010-08-17: Anna. Arreglar el problema de los mapas de las 02:00.
+Gestión UTE/bitácora/2010/2010-06-15/Maximo->SCADA	INFO: Datos pasan a MYSQL/observados
+Gestión UTE/bitácora/2010/2010-06-15/Maximo->SCADA	DONE: Mirar a ver las etiquetas que hay en maximo
+Gestión UTE/bitácora/2010/2010-06-16/Endesa	DONE: Crear los embalses
+Gestión UTE/bitácora/2010/2010-06-16/Endesa	DONE: crear las etiquetas
+Gestión UTE/bitácora/2010/2010-06-16/Endesa	DONE: Recompilar sin cableados
+Gestión UTE/bitácora/2010/2010-06-17/Endesa	DONE: Crear la tarea
+Gestión UTE/bitácora/2010/2010-06-17/Maximo->SCADA	DONE: relacionar la tarea con la medición
+Gestión UTE/bitácora/2010/2010-06-17/Maximo->SCADA	DONE: relacionar tarea con el cálculo del tiempo de la medida (linnigramas)
+Gestión UTE/bitácora/2010/2010-06-28/Endesa	DONE: Comprobar embalses
+Gestión UTE/bitácora/2010/2010-06-28/Endesa	DONE: Comprobar tags
+Gestión UTE/bitácora/2010/2010-06-28/Endesa	DONE: revisar acciona
+Gestión UTE/bitácora/2010/2010-06-28/Endesa	DONE: probar el funcionamiento del programa
+Gestión UTE/bitácora/2010/2010-06-28/Maximo	DONE: Eliminar las 'Guardias y Dietas' del informe de horas.
+Gestión UTE/bitácora/2010/2010-06-29/Endesa	DONE: comprobar 4 embalses
+Gestión UTE/bitácora/2010/2010-06-29/Endesa	DELAYED: Pasarlo a producción
+Gestión UTE/bitácora/2010/2010-06-29/Maximo->SCADA	DONE: preguntar si lo hacemos
+Gestión UTE/bitácora/2010/2010-06-29/Evolución pluviométrica	DONE: preguntar a BCN cuando se hace
+Gestión UTE/bitácora/2010/2010-06-29/Maximo	DONE: Instalar impresora cutePDF@serv-tel6
+Gestión UTE/bitácora/2010/2010-06-29/Maximo	DONE: Comprobar las no conformidades
+Gestión UTE/bitácora/2010/2010-07-07/Maximo	DONE: cuadro de mando hacerlo por horas
+Gestión UTE/bitácora/2010/2010-07-08/Maximo	DONE: Indicadores, hacerlo por horas
+Gestión UTE/bitácora/2010/2010-07-08/Maximo	DONE: enterarme de qué se está haciendo
+Gestión UTE/bitácora/2010/2010-07-08/Renovación de Hardware	DONE: 2010-07-10: Iturrizaga presupuesto rehecho
+Gestión UTE/bitácora/2010/2010-07-08/Renovación de Hardware	DONE: 2010-07-10: Datek
+Gestión UTE/bitácora/2010/2010-07-19/Maximo	DONE: contestar a Zamora
+Gestión UTE/bitácora/2010/2010-07-20/Maximo/Órdenes no computables corregidas de periodos anteriores	DONE: que aparezcan sólo las órdenes de periodos anteriores
+Gestión UTE/bitácora/2010/2010-07-20/Maximo/Órdenes no computables corregidas de periodos anteriores	INFO: Falta comparación de fechas
+Gestión UTE/bitácora/2010/2010-07-20/Maximo/Órdenes no computables corregidas de periodos anteriores	INFO: Si ponemos reportDate < :inicio no aparecen órdenes. Era :Desde, no :inicio
+Gestión UTE/bitácora/2010/2010-07-20/Idor/Incidencias/No tienen datos en Geiser	INFO: René Gómez -> Tabueña -> Alemany
+Gestión UTE/bitácora/2010/2010-07-20/Idor/Incidencias/No tienen datos en Geiser	INFO: ?? Rubén Calleja, 649414978
+Gestión UTE/bitácora/2010/2010-07-20/Idor/Incidencias/No tienen datos en Geiser	DONE: Después de reiniciarse
+Gestión UTE/bitácora/2010/2010-08-17/* Endesa	DONE: comprobar los días 1-8 de agosto y comprobar con Adolfo
+Gestión UTE/bitácora/2010/2010-08-17/* Endesa	INFO: está fallando extrepitosamente comparando con Endesa
+Gestión UTE/bitácora/2010/2010-08-17/* Perdida tabla Idor.ListaSenalesCHE	DONE: Mirar en los logs
+Gestión UTE/bitácora/2010/2010-08-17/* Perdida tabla Idor.ListaSenalesCHE	DONE: Mirar la copia de seguridad
+Gestión UTE/bitácora/2010/2010-08-17/* Perdida tabla Idor.ListaSenalesCHE	INFO: no se sabe qué ha pasado, fallaba intermitentemente.
+Gestión UTE/bitácora/2010/2010-08-17/* Museo del Ebro @ Logroño	INFO: Encargado=José Manuel Herrera @ CHE
+Gestión UTE/bitácora/2010/2010-08-17/* Museo del Ebro @ Logroño	INFO: Si pide algo decirle que el encargado es Adolfo.
+Gestión UTE/bitácora/2010/2010-08-18/* Endesa	DONE: Revisar si alguna vez faltan datos a las 23 horas
+Gestión UTE/bitácora/2010/2010-08-18/* Endesa	DONE: Si falla hay que hacer que Oliana, Flix, Ribarroja, Camarasa y Santa Ana siemre tengan una suma de caudales de sus grupos no nula.
+Gestión UTE/bitácora/2010/2010-08-18/* Endesa	DONE: ponerlo en producción y probar
+Gestión UTE/bitácora/2010/2010-08-18/* Maximo	DONE: Meter datos leídos en campo (inicio especificaciones).
+Gestión UTE/bitácora/2010/2010-08-18/* Maximo	DONE: Que el campo fecha de atención sea obligatoria a la hora de cerrar una orden para que no salga como no computable.
+Gestión UTE/bitácora/2010/2010-08-18/* Museo del Ebro @ Logroño	DONE: que se hagan una copia los de BCN
+Gestión UTE/bitácora/2010/2010-08-24/* Incidencia Huesca	INFO: Anna que hable con Paco Gago
+Gestión UTE/bitácora/2010/2010-08-24/* Incidencia Huesca	INFO: Paco Gago dice que el SCADA si los datos son más viejos de dos quinceminutales debería pintar en rojo
+Gestión UTE/bitácora/2010/2010-08-24/* Endesa	DONE: Mirar a ver porqué se ha parado a las 23:55
+Gestión UTE/bitácora/2010/2010-08-24/* Endesa	DONE: Mirar a ver valores raros
+Gestión UTE/bitácora/2010/2010-08-24/* Maximo	DONE: preparar especificaciones y dejárselas a Juanma
+Gestión UTE/bitácora/2010/2010-09-08/* Evolución pluviométrica	DONE: Eliminar los mapas de internet como está hecho en intranet.
+Gestión UTE/bitácora/2010/2010-09-08/* Endesa	DONE: Poner un try/catch para solucionar el problema de los ficheros creados pero vacíos
+Gestión UTE/bitácora/2010/2010-09-08/* Endesa	DONE: Coger los ficheros por la noche para ver si es eso lo que realmente pasa.
+Gestión UTE/bitácora/2010/2010-09-08/* Endesa	DONE: Si vuelve a pasar que nos envíen el fichero logs y las fechas
+Gestión UTE/bitácora/2010/2010-09-08/* Reunión	INFO: Endesa casi acabado
+Gestión UTE/bitácora/2010/2010-09-08/* Reunión	INFO: Evolución pluviométrica, se va a instalar ya
+Gestión UTE/bitácora/2010/2010-09-08/* Reunión	DONE: Valores observados, saber en qué estado estamos
+Gestión UTE/bitácora/2010/2010-09-08/* Reunión	DONE: Qué ha pasado con los traspasos?
+Gestión UTE/bitácora/2010/2010-09-08/* Reunión	DONE: 2010-09-25: pedir conexión WIFI
+Gestión UTE/bitácora/2010/2010-09-20/* Endesa	DONE: revisar log
+Gestión UTE/bitácora/2010/2010-09-20/* Endesa	DONE: pedir que cambien el procedimiento
+Gestión UTE/bitácora/2010/2010-09-20/* Episodios animación pluviométrica	DONE: Hablar con Nacho y Guillermo
+Gestión UTE/bitácora/2010/2010-09-20/* Episodios animación pluviométrica	DONE: Preparar unas especificaciones ¿maqueta?
+Gestión UTE/bitácora/2010/2010-09-20/* Incidencia Huesca	DONE: comparar regedits
+Gestión UTE/bitácora/2010/2010-09-20/* Incidencia Huesca	DONE: mirar a ver si se puede automatizar el proceso de reinstalación de servicios
+Gestión UTE/bitácora/2010/2010-09-20/* Incidencia Huesca	DONE: Documentarlo
+Gestión UTE/bitácora/2010/2010-09-20/* Presupuesto de recambios informática	DONE: 2010-09-22: Juanma
+Gestión UTE/bitácora/2010/2010-09-20/* Escada en soft	DONE: 2010-09-21: Juanma. Usaremos el cabezón
+Gestión UTE/bitácora/2010/2010-09-20/* Maximo	DONE: Revisar correo de Nacho
+Gestión UTE/bitácora/2010/2010-09-20/* Nagios 	DONE: pedir a Manuel que pueda monitorizar el servidor web
+Gestión UTE/bitácora/2010/2010-09-20/* Nagios 	DONE: 2010-09-23: Manuel que me autorice el acceso
+Gestión UTE/bitácora/2010/2010-09-21/* Maximo	DONE: Meter el flujo de compras
+Gestión UTE/bitácora/2010/2010-09-21/* Maximo	DONE: 2010-09-21: Nieves, OTs de Juan Carlos Zamora
+Gestión UTE/bitácora/2010/2010-09-21/* Maximo	DONE: Mirar incidencia de Zamora
+Gestión UTE/bitácora/2010/2010-09-23/* Valores observados	DONE: pasarle la pelota a Adolfo
+Gestión UTE/bitácora/2010/2010-09-24/* Mantenimiento	DONE: Hacer copia de seguridad
+Gestión UTE/bitácora/2010/2010-09-24/* Mantenimiento	DONE: Preguntar a Manuel qué necesita de nosotros para la VLAN.
+Gestión UTE/bitácora/2010/2010-09-24/* Proyector	DONE: presentar proyectos
+Gestión UTE/bitácora/Pendiente/2010-10-05/* Valores observados	TODO: 2010-11-20: Adolfo. Ir a un punto a hacer la revisión.
+Gestión UTE/bitácora/Pendiente/2010-10-05/* VLAN	DONE: Preparar versión 0
+Gestión UTE/bitácora/Pendiente/2010-10-06/* Valores observados	DONE: Revisar las señales de Adolfo
+Gestión UTE/bitácora/Pendiente/2010-10-06/* Maximo	DONE: Informes basados en horas de jornada
+Gestión UTE/bitácora/Pendiente/2010-10-06/* Maximo	DONE: Contestar a Zamora
+Gestión UTE/bitácora/Pendiente/2010-10-06/* VLAN	DONE: Meter el NAS
+Gestión UTE/bitácora/Pendiente/2010-10-06/* VLAN	DONE: revisar los servicios con juanma
+Gestión UTE/bitácora/Pendiente/2010-10-06/* VLAN	DONE: Clusters ¿IPs? ¿Comunicación entre nodos?
+Gestión UTE/bitácora/Pendiente/2010-10-06/* Epìsodios pluviométricos	DONE: 2010-10-28: Previsiones. 2010-10-07: Preparar EF v2
+Gestión UTE/bitácora/Pendiente/2010-10-18/* ENDESA	DONE: 2010-10-27 11:30 : 2010-10-25: qué pasa con los ficheros?
+Gestión UTE/bitácora/Pendiente/2010-10-18/* Previsiones	DONE: hacer
+Gestión UTE/bitácora/Pendiente/2010-10-20/* Animación web	DONE: 2010-10-21: Félix. Comprobar que los logs se guardan en gbd02/c:/tmp
+Gestión UTE/bitácora/Pendiente/2010-10-22 /* Endesa	DONE: 2010-10-21: Yo. que los datos que se calculan de caudal de más de 1 hora los marque para recálculo
+Gestión UTE/bitácora/Pendiente/2010-10-22 /* Gestor de fotos	DONE: contarle a Iturrizaga la posibilidad de usar el gestor.
+Gestión UTE/bitácora/Pendiente/2010-10-22 /* Gestor de fotos	TODO: 2010-11-18: yo. buscar una manera de automatizar la inclusión de puntos.
+
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Previsiones	DONE:  cambiar el organismo
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Previsiones	DONE: que se acceda desde el SCADA/Pantalla principal de hidrología (también hay que poner AEMET)
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Previsiones	DONE: Mirar a ver cómo funcionan los privilegios y que los usuarios SAD puedan verlo en Internet
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Mantenimiento	DONE: espacio gbd-02
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Mantenimiento	DONE: espacio scada-01
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Mantenimiento	DONE: espacio web-01
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Mantenimiento	TODO: espacio en gbd-01//O:/BDHistoria
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Maximo	DONE: 2010-10-29: Preparar temario con Nacho, Rubén y Nieves.
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Mantenimiento	DONE: Poner el canal_8@huesca (que está libre) como canal wan
+Gestión UTE/bitácora/Pendiente/2010-10-27/* Mantenimiento	INFO: así está configurado Las_Torcas@Zaragoza y Mediano@El_Grado
+Gestión UTE/bitácora/Pendiente/2010-10-27/* ssh -> remotas	WAIT : 2010-11-15: Pablo. montarlo en un servidor
+Gestión UTE/bitácora/Pendiente/2010-10-28/* Endesa	DONE: han venido los ficheros pero no va
+Gestión UTE/bitácora/Pendiente/2010-10-28/* Endesa	DONE: mirar qué pasa y arreglarlo
+Gestión UTE/bitácora/Pendiente/2010-10-28/* Mantenimiento	DONE: 2010-11-10: Nacho. pedir piezas para el de repuesto
+Gestión UTE/bitácora/Pendiente/2010-10-28/* Mantenimiento	DONE: instalar el servicio de respuesta a nagios en fe-02-MO
+Gestión UTE/bitácora/Pendiente/2010-10-28/* Maximo	DONE: enviar informes a Zamora
+Gestión UTE/bitácora/Pendiente/2010-10-28/* Previsión	DONE: que lance el navegador por defecto
+Gestión UTE/bitácora/Pendiente/2010-10-28/* Previsión	DONE: meterlo en internet
+Gestión UTE/bitácora/Pendiente/2010-11-02	DONE: logear conexiones web
+Gestión UTE/bitácora/Pendiente/2010-11-05	DONE: automatizar guardar logs de acceso dns
+Gestión UTE/bitácora/Pendiente/2010-11-05	DONE: enviar los ficheros php a barcelona
+Gestión UTE/bitácora/Pendiente/2010-11-05	DONE: Episodios de precipitaciones
+Gestión UTE/bitácora/Pendiente/2010-11-05	DONE: EF de caudales de peligrosidad
+Gestión UTE/bitácora/Pendiente/2010-11-08	DONE: 2010-11-08: Mirar a ver si se han guardado los log de viernes, sábado y dominigo
+Gestión UTE/bitácora/Pendiente/2010-11-08	DONE: explicación UTC
+Gestión UTE/bitácora/Pendiente/2010-11-08	DONE: contarle a Adolfo que ya está también en Inet.
+Gestión UTE/bitácora/Pendiente/2010-11-09	DONE: Cambiar el tipo de tabla de Mysql para avenidas
+Gestión UTE/bitácora/Pendiente/2010-11-12	DONE: 2010-11-16: Adolfo. operadores SAD puedan meter datos
+Gestión UTE/bitácora/Pendiente/2010-11-12	DONE: 2010-11-16: Adolfo. diseño episodios
+Gestión UTE/bitácora/Pendiente/2010-11-12	DONE: empezar caudales peligrosidad
+Gestión UTE/bitácora/Pendiente/2010-11-12/* Episodios	DONE: poner fondo
+Gestión UTE/bitácora/Pendiente/2010-11-12/* Episodios	DONE: lista con busqueda por años y lista desplegable
+Gestión UTE/bitácora/Pendiente/2010-11-12/* Episodios	DONE: usuarios Félix y Adolfo. He dejado sólo Félix pq no encuentro el usuario Adolfo.
+Gestión UTE/bitácora/Pendiente/2010-11-15	DONE: Poner menú para guardar episodios
+Gestión UTE/bitácora/Pendiente/2010-11-15	TODO: 2010-11-27: Adolfo. Usuarios y editores de los episodios.
+Gestión UTE/bitácora/Pendiente/2010-11-17/* Caudales peligrosidad	DONE: Especificaciones funcionales
+Gestión UTE/bitácora/Pendiente/2010-11-18	DONE: Mirar cómo meter el programa de pablo en este servidor	
+Gestión UTE/bitácora/Pendiente/2010-11-18	DONE: 2010-11-19: Concretar caudales de peligrosidad con Adolfo
+Gestión UTE/bitácora/Pendiente/2010-11-22/* Caudales peligrosidad	DONE: Mirar a ver cómo hacemos las tablas para que se puedan meter en el Gestor/solapa Geográficos
+Gestión UTE/bitácora/Pendiente/2010-11-22/* Caudales peligrosidad	DONE: Generar tablas
+Gestión UTE/bitácora/Pendiente/2010-11-22/* Caudales peligrosidad	TODO: poblar tablas
+Gestión UTE/bitácora/Pendiente/2010-11-22/* Episodios	DONE: Que lo vea todo el mundo
+Gestión UTE/bitácora/Pendiente/2010-11-22/* Episodios	DONE: Que lo puedan editar los usuarios nacho guillermo
+Gestión UTE/bitácora/Pendiente/2010-11-22/* Episodios	DONE: Comprobar la demo de 2 días que no arranca
+Gestión UTE/bitácora/Pendiente/2010-11-22/* Episodios	DONE: Pantalla + grande panel descriptivo
+Gestión UTE/bitácora/Pendiente/2010-11-23/* Episodios	DONE: Comprobar eliminación de imágenes
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112	INFO: ip 10.8.8.158
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112	INFO: ping ok
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112	INFO: Javier Beltran@SAI
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112	INFO: Alex martines@SICE.bcn
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112	INFO: Manuel Santos@SICE.zgz
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112	INFO: Moisés@SICE.zgz
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112/* nmap 	INFO: consola sin ssh
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112/* nmap 	INFO: utilidades gráficas con ssh
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112/* nmap 	INFO: puerto 101 17001 filtrado
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112/* nmap 	INFO: Pero responde al telnet
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112/* Whireshark	DONE: Llamar a Alex_Martínez@SICE.bcn
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* P112/* Whireshark	DONE: enviar tramas
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* C127	INFO: Cabecera canal de tauste.
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* C127	INFO: Intrusismo, remota 1, fe 0, scada 0.
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* C127	DONE: Llamar a Juanma a ver qué se puede hacer
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* C127	INFO: Si es una remota de SICE se puede forzar con unos comandos
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* C127	DONE: llamar a Eduardo o Lorenzo
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* C127	DONE: Forzado en Utilidades estación/Adquisición digitales leer la señal de intrusismo
+Gestión UTE/bitácora/Pendiente/2010-11-24/* mantenimiento/* Idor/MySQL	INFO: 2010-11-24 16:23 Too many connections
+Gestión UTE/bitácora/Pendiente/2010-12-13/* Instalar maqueta desarrollo intranet	DONE: servidor web
+Gestión UTE/bitácora/Pendiente/2010-12-13/* Instalar maqueta desarrollo intranet	DONE: PHP
+Gestión UTE/bitácora/Pendiente/2010-12-13/* Instalar maqueta desarrollo intranet	DONE: ODBC
+Gestión UTE/bitácora/Pendiente/2010-12-13/* Instalar maqueta desarrollo intranet	DONE: replicar intranet
+Gestión UTE/bitácora/Pendiente/2010-12-14/* Caudales peligrosidad	DONE: enviar correo a 
+Gestión UTE/bitácora/Pendiente/2010-12-14/* Caudales peligrosidad	DONE: comprobar los cambios realizados por Barcelona y subir los míos
+Gestión UTE/bitácora/Pendiente/2010-12-14/* Caudales peligrosidad	TODO: Finalizar el modelo con el acceso a los mapas
+Gestión UTE/bitácora/Pendiente/2010-12-14/* Caudales peligrosidad	TODO: acabar la vista con los valores nulos y la tabla de aforos
+Gestión UTE/bitácora/Pendiente/2010-12-14/* Caudales peligrosidad	TODO: visor/lista
+Gestión UTE/bitácora/Pendiente/2010-12-14/* Caudales peligrosidad	TODO: visor/detalle
+Gestión UTE/bitácora/Pendiente/2010-12-21/* Caudales peligrosidad	DONE: Que funcionen los episodios en la maqueta
+Gestión UTE/bitácora/Pendiente/2010-12-21/* Caudales peligrosidad	DONE: Identificar dónde van los mapas en visor/lista
+Gestión UTE/bitácora/Pendiente/2011-01-10/* Incidencias/* Traspaso a MySQL	INFO: No funciona el traspaso de quinceminutales desde el 2011-01-08
+Gestión UTE/bitácora/Pendiente/2011-01-10/* Incidencias/* Traspaso a MySQL	DONE: Avisado a BCN
+Gestión UTE/bitácora/Pendiente/2011-01-10/* Incidencias/* Traspaso a MySQL	TODO: 2011-01-10: Anna. Que me cuente qué es lo que ha pasado.
+Gestión UTE/bitácora/Pendiente/2011-01-10/* Incidencias/* Traspaso a MySQL	DONE: Informar a Adolfo
+Gestión UTE/bitácora/Pendiente/2011-01-10/* Incidencias/* Compactar la base de datos del E030	DONE: Lo hace Lorenzo.
+Gestión UTE/bitácora/Pendiente/2011-01-10/* Incidencias/* Problemas con los datos del SAD	DONE: Renicio servicio GBD01/SAIHSAD_ServicioCargaDatos
+Gestión UTE/bitácora/Pendiente/2011-01-10/* Incidencias/* Problemas con los datos del SAD	DONE: Preguntar a Juanma cuál es el otro servicio.
+
+Gestión UTE/bitácora/Pendiente/2011-01-10/* Caudales peligrosidad	TODO: Hacer unos elementos comunes para tramos y aforos
