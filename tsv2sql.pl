@@ -125,9 +125,10 @@ while(<>) {
 		my $valores_preparados=join(", ", @valores_preparados);
 		my $busquedas=join(" AND ", @busquedas);
 
-		if ($onDuplicateKey==1) {
-			$sql="INSERT INTO $tabla ($campos) VALUES ($valores_preparados) ON DUPLICATE KEY UPDATE $updates;";
+		if ($onDuplicateKey==0) {
+			$sql="UPDATE $tabla SET $updates WHERE $busquedas;";
 		} elsif ($onDuplicateKey==2) {
+			# truqui para updatear los duplicados en oracle
 			my (@creacion_tabla, @comparador);
 			foreach(@busquedas) {
 				my ($campo, $valor) = split "=";
@@ -138,7 +139,9 @@ while(<>) {
 			$comparador = join(" AND ", @comparador);
 			$sql="MERGE INTO $tabla u USING (SELECT $creacion_tabla  FROM dual) a ON ($comparador) WHEN MATCHED THEN UPDATE SET $updates WHEN NOT MATCHED THEN INSERT ($campos) VALUES ($valores_preparados);";
 		} else {
-			$sql="UPDATE $tabla SET $updates WHERE $busquedas;";
+			# onDuplicateKey==1
+			# truqui para updatear los duplicados en mysql
+			$sql="INSERT INTO $tabla ($campos) VALUES ($valores_preparados) ON DUPLICATE KEY UPDATE $updates;";
 		}
 		print "$sql\n";
 	};

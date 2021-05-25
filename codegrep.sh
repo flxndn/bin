@@ -1,6 +1,10 @@
 #!/bin/bash
 
-declare -a extensiones=(Makefile '*.sh' '*.bash' '*.pl' '*.php' '*.js' '*.htm' '*.html' '*.css' '*.cpp' '*.py' '*.java' '*.jrxml' '*.xml' '*.xsl' '*.c' '*.h' '*.frm' '*.vb')
+declare -a extensiones=(Makefile '*.sh' '*.bash' \
+							'*.pl' '*.php' '*.js' '*.htm' '*.html' \
+							'*.css' '*.cpp' '*.py' '*.java' '*.jrxml' \
+							'*.xml' '*.xsl' '*.c' '*.h' '*.frm' '*.vb' \
+							'*.svg' )
 
 lista=""
 listainames=""

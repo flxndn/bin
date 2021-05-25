@@ -13,7 +13,8 @@ sub help {
 		> :!print_r_prepara [-e|p]
 	* Opciones
 		- -h :: Muestra esta ayuda.
-		- -e :: Saca las variables en el log de error del servidor de páginas web.
+		- -t :: Saca las variables en el log de error del servidor de páginas web.
+		- -e :: Saca las variables en pantalla sin formatear.
 		- -p :: Saca las variables con el código del documento. :: Es la opción por defecto.
 		- -o :: Saca las variables usando la función otros/globales.php::pr();
 EOHELP
@@ -39,6 +40,9 @@ sub lista_variables {
 
 if ($#ARGV > -1 && $ARGV[0] eq '-h') {
 	help;
+} elsif ($#ARGV > -1 && $ARGV[0] eq '-t') {
+	shift;
+	print "print_r(array(".lista_variables()."));\n";
 } elsif ($#ARGV > -1 && $ARGV[0] eq '-e') {
 	shift;
 	print "error_log(print_r(array(".lista_variables()."), true));\n";

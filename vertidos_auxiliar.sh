@@ -25,49 +25,55 @@ HELP
 #-------------------------------------------------------------------------------
 
 
-if [ "x$1" = "x-h" ] || [ "x$1" = "x--help" ]; then
-	ayuda
-	exit;
-fi
-if [ "x$1" = "x-t" ] || [ "x$1" = "x--txt" ]; then
-	tmp="$dir_pendientes/vertidos_$(date --rfc-3339=seconds| sed "s/[^0-9]/_/g").txt";
+while [ "x$1" != "x" ]; do
+	if [ "x$1" = "x-h" ] || [ "x$1" = "x--help" ]; then
+		ayuda
+		exit;
+	fi
+	if [ "x$1" = "x-t" ] || [ "x$1" = "x--txt" ]; then
+		tmp="$dir_pendientes/vertidos_$(date --rfc-3339=seconds| sed "s/[^0-9]/_/g").txt";
 
-	find . -name \*.txt -o -name \*.old \
-	| sort \
-	| xargs cat > $tmp \
-	&& find . -name \*.txt -o -name \*.old \
-	| xargs rm -f;
+		find . -name \*.txt -o -name \*.old \
+		| dos2unix \
+		| sort \
+		| xargs cat \
+		| sed 's/^\xEF\xBB\xBF//' > $tmp \
+		&& find . -name \*.txt -o -name \*.old \
+		| xargs rm -f;
 
-	exit;
-fi
-if [ "x$1" = "x-d" ] || [ "x$1" = "x--dict" ]; then
-	for d in $(find . -name \*.rel);do
-		destino="$dir_dict/$(basename $d)";
-		if [ ! -e $destino ]; then
-			mv -v $d $dir_dict;
-		else 
-			echo "Diccionario igual al anterior"; \
-			diff -q $d $destino >/dev/null \
-			&& rm $d \
-			|| vimdiff $d $destino
-		fi
-		touch $destino
-	done
+		shift;
+	fi
+	if [ "x$1" = "x-d" ] || [ "x$1" = "x--dict" ]; then
+		for d in $(find . -name \*.rel);do
+			destino="$dir_dict/$(basename $d)";
+			if [ ! -e $destino ]; then
+				mv -v $d $dir_dict;
+			else 
+				echo "Diccionario igual al anterior"; \
+				diff -q $d $destino >/dev/null \
+				&& rm $d \
+				|| vimdiff $d $destino
+			fi
+			touch $destino
+		done
 
-	exit;
-fi
-set -x
-if [ "x$1" = "x-r" ] || [ "x$1" = "x--unrar" ]; then
-	find . -name \*.rar \
-	| xargs -n1 unrar x \
-	&& find . -name \*.rar -delete
+		shift;
+	fi
+	if [ "x$1" = "x-r" ] || [ "x$1" = "x--unrar" ]; then
+		for i in $(find . -name \*.rar); do 
+			unrar x "$i" \
+			&& rm -f "$i";
+		done
 
-	exit;
-fi
-if [ "x$1" = "x-z" ] || [ "x$1" = "x--unzip" ]; then
-	find . -name \*.zip \
-	| xargs -n1 unzip -f -o  #\
-	#&& find . -name \*.zip -delete
+		shift;
+	fi
+	IFS=$'\n'
+	if [ "x$1" = "x-z" ] || [ "x$1" = "x--unzip" ]; then
+		for i in $(find . -name \*.zip); do 
+			unzip "$i" \
+			&& rm -f "$i";
+		done
 
-	exit;
-fi
+		shift;
+	fi
+done
