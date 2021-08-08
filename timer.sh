@@ -62,6 +62,8 @@ parse_params() {
   units=minutes
   unitsa=m
   method=text
+  notify=0
+  titulo=Timer
 
   while :; do
     case "${1-}" in
@@ -72,6 +74,8 @@ parse_params() {
     -s | --seconds) units=seconds unitsa=s;;
     -g | --gauge) method=gauge ;;
     -t | --text) method=text ;;
+    -n | --notify) notify=1 ;;
+    -u | --titulo) titulo="${2-}"; shift;;
     -?*) die "Unknown option: $1" ;;
     *) break ;;
     esac
@@ -99,8 +103,12 @@ for i in $(seq $total -1 0); do
 	else
 		# dialog gauge
 		percentage=$((100-i*100/total))
-		echo $percentage | dialog --title "Timer" --gauge "Please wait $i $units" 10 60 0
+		echo $percentage | dialog --title "$titulo" --gauge "Please wait $i $units" 10 60 0
+		#echo $percentage | dialog --title "$titulo" --gauge "Please wait $i $units" 10 60 0
 	fi
 	sleep 1$unitsa
 done
 
+if [ "$notify" = "1" ] ; then
+	notify-send timer.sh "Tiempo cumplido: $titulo $total $units"
+fi
