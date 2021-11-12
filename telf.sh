@@ -77,7 +77,11 @@ main() {
 	case $COMMAND in
 		e) vi $entradas
 			;;
-		*) grep "^[^#]" $dir/*.* | grep --color=auto $OPCIONES_GREP $PARAMS
+		*) if [ "x$PARAMS" = "x" ]; then
+				grep "^[^#]" $dir/*.* | fzf --preview='figlet {}'
+			else
+				grep "^[^#]" $dir/*.* | grep $OPCIONES_GREP $PARAMS | fzf --preview='figlet {}'
+			fi
 			;;
 	esac
 } 

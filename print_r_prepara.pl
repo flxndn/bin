@@ -49,6 +49,9 @@ if ($#ARGV > -1 && $ARGV[0] eq '-h') {
 } elsif ($#ARGV > -1 && $ARGV[0] eq '-o') {
 	shift;
 	print "pr(array(".lista_variables()."), 'xxx_nombre', 'xxx_funcion');\n";
+} elsif ($#ARGV > -1 && $ARGV[0] eq '-p') {
+	shift;
+	print "echo \"<pre>\".print_r(array(".lista_variables()."), true).\"</pre>\";\n";
 } else { # opción -p
 	print "echo \"<pre>\".print_r(array(".lista_variables()."), true).\"</pre>\";\n";
 }
