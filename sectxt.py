@@ -1,1 +1,1 @@
-/home/felix/Documentos/personal/sectxt_svn/trunk/sectxt.py
+/home/felix/Documentos/personal/sectxt.git/trunk/sectxt.py
