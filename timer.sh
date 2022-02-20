@@ -12,10 +12,7 @@ usage() {
 * $(basename "${BASH_SOURCE[0]}")
 	* Uso
 		> $(basename "${BASH_SOURCE[0]}") [-g|t] [-u titulo] [-v] [-s|m] time
-<<<<<<< HEAD
-=======
 		> $(basename "${BASH_SOURCE[0]}") [-h]
->>>>>>> acb0fec (No me acuerdo)
 
 	* Descripción
 		Realiza una cuentaatrás desde time hasta cero.
