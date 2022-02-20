@@ -12,7 +12,6 @@ usage() {
 * $(basename "${BASH_SOURCE[0]}")
 	* Uso
 		> $(basename "${BASH_SOURCE[0]}") [-g|t] [-u titulo] [-v] [-s|m] time
-		> $(basename "${BASH_SOURCE[0]}") [-h]
 
 	* Descripción
 		Realiza una cuentaatrás desde time hasta cero.
