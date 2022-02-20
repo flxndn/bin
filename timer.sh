@@ -11,7 +11,8 @@ usage() {
   cat <<EOF
 * $(basename "${BASH_SOURCE[0]}")
 	* Uso
-		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-s] [-m] time
+		> $(basename "${BASH_SOURCE[0]}") [-g] [-v] [-s] [-m] time
+		> $(basename "${BASH_SOURCE[0]}") [-h]
 
 	* Descripción
 		Realiza una cuentaatrás desde time hasta cero.
@@ -19,11 +20,11 @@ usage() {
 	* Opciones
 		- -h, --help	:: Print this help and exit
 		- -v, --verbose	:: Print script debug info
-		- -v, --verbose	:: Print script debug info
 		- -t, --text	:: Saca el resultado como texto. :: Es la opción por defecto.
 		- -g, --gauge	:: Saca el resultado con dialog guge.
 		- -m, --minutes	:: El tiempo se expresa en minutos. :: Es la opción por defecto.
 		- -s, --seconds	:: El tiempo se expresa en segundos.
+		- -n, --notify	:: Notifica al sistema que ha acabado.
 EOF
   exit
 }
