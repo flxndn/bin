@@ -19,7 +19,6 @@ usage() {
 	* Opciones
 		- -h, --help	:: Print this help and exit
 		- -v, --verbose	:: Print script debug info
-		- -v, --verbose	:: Print script debug info
 		- -t, --text	:: Saca el resultado como texto. :: Es la opción por defecto.
 		- -g, --gauge	:: Saca el resultado con dialog guge.
 		- -m, --minutes	:: El tiempo se expresa en minutos. :: Es la opción por defecto.
@@ -98,7 +97,7 @@ setup_colors
 total=${args[0]}
 for i in $(seq $total -1 0); do 
 	if [ $method = 'text' ]; then
-		echo -n "$i	$units";
+		echo -n "$i	$units ";
 		date
 	else
 		# dialog gauge

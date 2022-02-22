@@ -23,6 +23,7 @@ usage() {
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
 		- -t, --texto		:: Texto de la nota.
+		- -c, --cat			:: Saca el contenido del fichero $fichero.
 EOF
 	exit
 }
@@ -59,12 +60,14 @@ parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
 	texto=''
+	orden=insertar
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
+		-c | --cat) orden=cat;;
 		-t | --texto) # example named parameter
 			texto="${2-}"
 			shift
@@ -86,8 +89,11 @@ parse_params "$@"
 setup_colors
 
 # script logic here
+if [ $orden = 'cat' ]; then
+	cat $fichero;
+else
 (
-	echo "* " 
+	echo -n "* " 
 	date +%Y-%m-%dT%H:%M:%S 
 	if [ "$texto" ]; then
 		echo "$texto" 
@@ -95,3 +101,4 @@ setup_colors
 		cat
 	fi | sed "s/^/\t/";
 ) >> $fichero
+fi
