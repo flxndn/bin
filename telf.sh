@@ -78,9 +78,9 @@ main() {
 		e) vi $entradas
 			;;
 		*) if [ "x$PARAMS" = "x" ]; then
-				grep "^[^#]" $dir/*.* | fzf --preview='figlet {}'
+				grep "^[^#]" $dir/*.* | fzf --preview='figlet -f banner {}'
 			else
-				grep "^[^#]" $dir/*.* | grep $OPCIONES_GREP $PARAMS | fzf --preview='figlet {}'
+				grep "^[^#]" $dir/*.* | grep $OPCIONES_GREP $PARAMS | fzf --preview='figlet -f banner {}'
 			fi
 			;;
 	esac
