@@ -24,6 +24,7 @@ usage() {
 		- -m, --minutes	:: El tiempo se expresa en minutos. :: Es la opción por defecto.
 		- -s, --seconds	:: El tiempo se expresa en segundos.
 		- -n, --notify	:: Genera un aviso del sistema.
+		- -u, --titulo ''titulo'' :: Título de la notificación. ::  Por defecto se usa ''Timer''.
 EOF
   exit
 }
