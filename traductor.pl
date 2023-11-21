@@ -52,7 +52,6 @@ HELP
 	}
 }
 
-
 while(<>) {
 	chomp; s/\r//;
 	my @valores =split("\t");

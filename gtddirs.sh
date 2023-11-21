@@ -4,34 +4,35 @@ set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
-script_name=$(basename "${BASH_SOURCE[0]}")
+dirbase=~/gtd
+cd $dirbase
 
 #-------------------------------------------------------------------------------
 usage() {
 #-------------------------------------------------------------------------------
 	cat <<EOF
-* $script_name
+* $(basename "${BASH_SOURCE[0]}") 
 	* Uso
-		> $script_name [-h] [-v] [-f] -p param_value arg1 [arg2...]
+		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
 
 	* Descipción
-		Script description here.
+		Gestión de GTD basada en directorios.
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -f, --flag		:: Some flag description
-		- -p, --param		:: Some param description
+		- -i, --insert		:: Inserta una nueva tarea.
+		- -d, --subdirectorio	:: Selecciona un subdirectorio.
 EOF
 	exit
 }
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 cleanup() {
 #-------------------------------------------------------------------------------
 	trap - SIGINT SIGTERM ERR EXIT
 	# script cleanup here
 }
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 setup_colors() {
 #-------------------------------------------------------------------------------
 	if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
@@ -40,12 +41,12 @@ setup_colors() {
 		NOFORMAT='' RED='' GREEN='' ORANGE='' BLUE='' PURPLE='' CYAN='' YELLOW=''
 	fi
 }
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 msg() {
 #-------------------------------------------------------------------------------
-	echo >&2 -e "$script_name. ${1-}"
+	echo >&2 -e "${1-}"
 }
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 die() {
 #-------------------------------------------------------------------------------
 	local msg=$1
@@ -53,21 +54,22 @@ die() {
 	msg "$msg"
 	exit "$code"
 }
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	flag=0
-	param=''
+	accion='lista'
+	subdirectorio=''
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-f | --flag) flag=1 ;; # example flag
-		-p | --param) # example named parameter
-			param="${2-}"
+		-i | --insert) accion='insertar' ;; # example flag
+		-l | --lista) accion='lista' ;; # example flag
+		-s | --subdirectorio) # example named parameter
+			subdirectorio="${2-}"
 			shift
 			;;
 		-?*) die "Unknown option: $1" ;;
@@ -78,23 +80,39 @@ parse_params() {
 
 	args=("$@")
 
-	# check required params and arguments
-	[[ -z "${param-}" ]] && die "Missing required parameter: param"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
 #-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 parse_params "$@"
 setup_colors
 
-#for app in pon_aqui_las_dependencias_y_descomenta; do
-	 #which $app >/dev/null || die "$script_name depende de $app, instálela.";
-#done
 # script logic here
+case "$accion" in
+	lista)
+		#find $dirbase -maxdepth 2 -type f 
+		f="$(find . -maxdepth 2 -type f | fzf --preview='batcat {}')"
+		subaccion=$(echo -e "editar\nfinalizar" | fzf)
+		echo "$subaccion $f"
+		case "$subaccion" in
+			editar)
+				vi "$f"
+				;;
+			finalizar)
+				mv "$f" "$(dirname "$f")/done"
+				;;
+		esac
+		;;
+	insertar)
+		if [ -z "$subdirectorio" ]; then
+			subdirectorio="$(basename "$(find $dirbase -maxdepth 1 -type d| fzf)")";
+		fi
+		echo -n "título?: "
+		read titulo
+		file="$dirbase/$subdirectorio/$(date +"%Y-%m-%d")-$titulo.sec"
+		echo -e "* $titulo\n\t* Descripcion\n\n\t* Resultados" > "$file"
+		vi "$file"
+	;;
+esac
 
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- flag: ${flag}"
-msg "- param: ${param}"
-msg "- arguments: ${args[*]-}"
