@@ -28,12 +28,15 @@ fi
 subasta=$1;
 shift;
 
+set -x 
+
+cookies=$(mktemp)
+wget --quiet --keep-session-cookies --save-cookies $cookies $url_base -O - > /dev/null 
+
 for lote in $*; do 
-	cookies=$(mktemp)
-	wget --quiet --keep-session-cookies --save-cookies $cookies $url_base -O - > /dev/null 
 	tmp=$(mktemp)
 	wget 	--quiet \
-			--user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0" \
+			--user-agent "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:98.0) Gecko/20100101 Firefox/98.0" \
 			--post-data "Tx_Subast=$subasta&Tx_Lote=$lote&Tx_Titulo=&Tx_Autor=&Tx_Materi=&Tx_Edicio=&Tx_Lugar=&Tx_Ano=&boton1=Buscar" \
 			--load-cookies $cookies \
 			-O $tmp \
@@ -49,6 +52,6 @@ for lote in $*; do
 		| sed -n '19p' \
 		| sed "s/ //g; s/\&nbsp;€//"
 	fi
-	rm $tmp
-	rm $cookies
+	#rm $tmp
 done
+rm $cookies

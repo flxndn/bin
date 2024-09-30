@@ -3,36 +3,30 @@
 set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
+readonly prefijo_defecto="-";
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 
 #-------------------------------------------------------------------------------
 usage() {
 #-------------------------------------------------------------------------------
-	nombre=$(basename "${BASH_SOURCE[0]}") 
-	cat << HELPEND
-* $nombre
+	cat <<EOF
+* $(basename "${BASH_SOURCE[0]}") 
 	* Uso
-		> $nombre [opciones] -d ''fichero_descripcion.txt'' img1 [img2 ... imgn]
-		> $nombre -h|--help
+		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -e elegidos arg1 [arg2...]
+
+	* Descipción
+		Script description here.
 
 	* Opciones
-		* -h | --help :: Muestra esta ayuda.
-		* -d | --descripcion ''fichero_descripcion.txt'' :: Usa la descripción de las imágenes que hay en el 
-		* -v | --verbose :: Saca la información de depuración por la salida de error estándar.
-		* -a | --autororate :: Rota automticamente las imágenes según la información exif.
-		* -n | --dry-run :: Simula el proceso pero sin enviar los archivo.
-	
-	* Descripción
-		Las imágenes se guardan en cloudinary en el directorio que tiene el 
-		mismo nombre que el directorio en el que se encuentran las imágenes.
-
-		Como entrada tiene un fichero en el que las líneas impares son el 
-		nombre de las imágenes y en la segunda línea está la descripción de 
-		la imagen.
-
-HELPEND
+		- -h, --help		:: Print this help and exit
+		- -v, --verbose		:: Print script debug info
+		- -e, --elegidos	:: Lista de etiquetas elegidas separadas por comas (sin espacios).
+		- -f, --prefijo	''prefijo'' :: Prefijo que se añade a los seleccionados en el listado de fzf. :: Por defecto es ''$prefijo_defecto''.
+		- -p, --preview ''comando'' :: Comando que se usará para previsualizar la opción elegida.
+EOF
+	exit
 }
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 cleanup() {
 #-------------------------------------------------------------------------------
 	trap - SIGINT SIGTERM ERR EXIT
@@ -64,19 +58,29 @@ die() {
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	dryrun=0
-	autororate=0
-	fichero_descripcion=''
+	elegidos=''
+	prefijo=$prefijo_defecto
+	opcion_comando=''
+	opcion_preview=''
 
 	while :; do
 		case "${1-}" in
-		-h | --help) usage; exit 0 ;;
+		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-a | --autororate) autororate=1 ;; 
-		-n | --dry-run) dryrun=1 ;; 
-		-d | --descripcion) 
-			fichero_descripcion="${2-}"
+		-e | --elegidos) # example named parameter
+			set -x
+			elegidos="${2-}"
+			set +x
+			shift
+			;;
+		-f | --prefijo) 
+			prefijo="${2-}"
+			shift
+			;;
+		-p | --preview) 
+			opcion_comando="--preview"
+			opcion_preview='echo {} | sed "s/'$prefijo'//" | '"${2-}"
 			shift
 			;;
 		-?*) die "Unknown option: $1" ;;
@@ -88,8 +92,7 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${fichero_descripcion-}" ]] && die "Missing required parameter: fichero_descripcion"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+	#[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
@@ -99,17 +102,39 @@ parse_params "$@"
 setup_colors
 
 # script logic here
+IFS=","
+elegidos_arr=($elegidos)
+opciones=("${args[@]}")
+# Me quedo con los argumentos que no estén elegidos
+for elegido in ${elegidos_arr[@]}; do
+	declare -a tmp=()
+	for opcion in ${opciones[@]}; do
+		if [ $opcion != $elegido ]; then
+			tmp+=($opcion)
+		fi
+	done
+	opciones=("${tmp[@]}")
+done
+opciones_totales=$( (for i in ${elegidos_arr[@]} ; do echo $prefijo$i; done; for i in ${opciones[@]}; do echo $i; done ) | fzf --multi $opcion_comando $opcion_preview )
 
-for img in ${args[@]}; do
-	[ $autororate -eq 1 ] && exiftool -q -Orientation= -overwrite_original $img
-	folder=$(basename $(dirname $(realpath $img)))
-	basename="$(basename $img)"
-	titulo="$(grep '^'"$basename"$'\t' "$fichero_descripcion" | cut -f2-)"
-	[ $dryrun -eq 0 ] \
-		&& cloudinary_upload.sh \
-			--folder $folder \
-			--public_id "${basename%.*}" \
-			--title "$titulo" \
-			--miniature \
-			"$basename";
-done 
+declare -a a_eliminar=()
+IFS=$'\n'
+for fzflegido in $opciones_totales ; do 
+	if [[ "$fzflegido" =~ ^$prefijo.* ]]; then
+		a_eliminar+=($fzflegido)
+	else
+		echo $fzflegido
+	fi
+done
+for i in "${elegidos_arr[@]}"; do
+	encontrado=''
+	for j in "${a_eliminar[@]}";do
+		j=$(echo $j | sed "s/^$prefijo//");
+		if [ $i == $j ]; then
+			encontrado=1;
+		fi
+	done
+	if [ ! "$encontrado" ]; then
+		echo $i; 
+	fi
+done

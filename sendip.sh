@@ -4,35 +4,26 @@ set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
+fichero_ip=~/.sendip.txt
 
 #-------------------------------------------------------------------------------
 usage() {
 #-------------------------------------------------------------------------------
-	nombre=$(basename "${BASH_SOURCE[0]}") 
-	cat << HELPEND
-* $nombre
+	cat <<EOF
+* $(basename "${BASH_SOURCE[0]}") 
 	* Uso
-		> $nombre [opciones] -d ''fichero_descripcion.txt'' img1 [img2 ... imgn]
-		> $nombre -h|--help
+		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
+
+	* Descipción
+		Envía la ip del equipo mediante ntfy.sh si ha cambiado respecto a la que hay en $fichero_ip
 
 	* Opciones
-		* -h | --help :: Muestra esta ayuda.
-		* -d | --descripcion ''fichero_descripcion.txt'' :: Usa la descripción de las imágenes que hay en el 
-		* -v | --verbose :: Saca la información de depuración por la salida de error estándar.
-		* -a | --autororate :: Rota automticamente las imágenes según la información exif.
-		* -n | --dry-run :: Simula el proceso pero sin enviar los archivo.
-	
-	* Descripción
-		Las imágenes se guardan en cloudinary en el directorio que tiene el 
-		mismo nombre que el directorio en el que se encuentran las imágenes.
-
-		Como entrada tiene un fichero en el que las líneas impares son el 
-		nombre de las imágenes y en la segunda línea está la descripción de 
-		la imagen.
-
-HELPEND
+		- -h, --help		:: Print this help and exit
+		- -v, --verbose		:: Print script debug info
+EOF
+	exit
 }
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 cleanup() {
 #-------------------------------------------------------------------------------
 	trap - SIGINT SIGTERM ERR EXIT
@@ -64,21 +55,12 @@ die() {
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	dryrun=0
-	autororate=0
-	fichero_descripcion=''
 
 	while :; do
 		case "${1-}" in
-		-h | --help) usage; exit 0 ;;
+		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-a | --autororate) autororate=1 ;; 
-		-n | --dry-run) dryrun=1 ;; 
-		-d | --descripcion) 
-			fichero_descripcion="${2-}"
-			shift
-			;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -88,8 +70,6 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${fichero_descripcion-}" ]] && die "Missing required parameter: fichero_descripcion"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
@@ -99,17 +79,14 @@ parse_params "$@"
 setup_colors
 
 # script logic here
+ipactual=$(hostname -I) 
+ipexterna=$(dig +short myip.opendns.com @resolver1.opendns.com)
+ips="$ipactual:$ipexterna"
+[ -e $fichero_ip ] || touch $fichero_ip
 
-for img in ${args[@]}; do
-	[ $autororate -eq 1 ] && exiftool -q -Orientation= -overwrite_original $img
-	folder=$(basename $(dirname $(realpath $img)))
-	basename="$(basename $img)"
-	titulo="$(grep '^'"$basename"$'\t' "$fichero_descripcion" | cut -f2-)"
-	[ $dryrun -eq 0 ] \
-		&& cloudinary_upload.sh \
-			--folder $folder \
-			--public_id "${basename%.*}" \
-			--title "$titulo" \
-			--miniature \
-			"$basename";
-done 
+if [ "$(cat $fichero_ip)" = "$ips" ] ; then
+	touch $fichero_ip
+else
+	echo "$ips" > $fichero_ip
+	/home/felix/bin/ntfy.sh "$ips" 
+fi

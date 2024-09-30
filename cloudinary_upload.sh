@@ -9,7 +9,7 @@ function ayuda {
 
 	* Uso
 		> cloudinary_upload.sh -h
-		> cloudinary_upload.sh [-f folder] [-T titulo] [-t tags] -i identificador imagen
+		> cloudinary_upload.sh [-f folder] [-m|--miniature] [-T titulo] [-t tags] -i identificador imagen
 
 	* Opciones
 		- -h | --help :: Muestra esta ayuda.
