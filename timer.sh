@@ -26,7 +26,7 @@ usage() {
 		- -s, --seconds	:: El tiempo se expresa en segundos.
 		- -n, --notify	:: Notifica al sistema que ha acabado.
 		- -N, --ntfy	:: Notifica al servicio web ntfy.sh que ha acabado.
-		- -u, --titulo texto	:: Utiliza ''texto'' en los títulos y notificaciones. :: Si no se indica por defecto es ''Timer''
+		- -u, --titulo ''texto''	:: Utiliza ''texto'' en los títulos y notificaciones. :: Si no se indica por defecto es ''Timer''
 EOF
   exit
 }
