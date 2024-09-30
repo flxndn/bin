@@ -40,7 +40,7 @@ def print_debug(info):
 def print_yaml(info):
 #-------------------------------------------------------------------------------
 	print "- título: "+ unicode(info['img']['data']['context']['custom']['caption']).encode('utf8')
-	print "  texto: -"
+	print "  texto: "
 	print "  mini: " + unicode(info['thumb']['data']['secure_url']).encode('utf8')
 	print "  maxi: " + unicode(info['img']['data']['secure_url']).encode('utf8')
 #-------------------------------------------------------------------------------
