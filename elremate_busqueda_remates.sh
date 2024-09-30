@@ -1,1 +1,0 @@
-/home/felix/Documentos/personal/bibliotranstornado/catalogo_git/bin/elremate_busqueda_remates.sh
