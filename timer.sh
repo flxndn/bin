@@ -11,7 +11,7 @@ usage() {
   cat <<EOF
 * $(basename "${BASH_SOURCE[0]}")
 	* Uso
-		> $(basename "${BASH_SOURCE[0]}") [-g] [-v] [-s] [-m] time
+		> $(basename "${BASH_SOURCE[0]}") [-g|t] [-u titulo] [-v] [-s|m] time
 		> $(basename "${BASH_SOURCE[0]}") [-h]
 
 	* Descripción
@@ -27,6 +27,8 @@ usage() {
 		- -n, --notify	:: Genera un aviso del sistema.
 		- -u, --titulo ''titulo'' :: Título de la notificación. ::  Por defecto se usa ''Timer''.
 		- -n, --notify	:: Notifica al sistema que ha acabado.
+		- -N, --ntfy	:: Notifica al servicio web ntfy.sh que ha acabado.
+		- -u, --titulo texto	:: Utiliza ''texto'' en los títulos y notificaciones. :: Si no se indica por defecto es ''Timer''
 EOF
   exit
 }
@@ -66,6 +68,7 @@ parse_params() {
   unitsa=m
   method=text
   notify=0
+  ntfy=0
   titulo=Timer
 
   while :; do
@@ -78,6 +81,7 @@ parse_params() {
     -g | --gauge) method=gauge ;;
     -t | --text) method=text ;;
     -n | --notify) notify=1 ;;
+    -N | --ntfy) ntfy=1 ;;
     -u | --titulo) titulo="${2-}"; shift;;
     -?*) die "Unknown option: $1" ;;
     *) break ;;
@@ -112,6 +116,5 @@ for i in $(seq $total -1 0); do
 	sleep 1$unitsa
 done
 
-if [ "$notify" = "1" ] ; then
-	notify-send timer.sh "Tiempo cumplido: $titulo $total $units"
-fi
+[ "$notify" = "1" ] && notify-send timer.sh "Tiempo cumplido: $titulo $total $units"
+[ "$ntfy" = "1" ] && ntfy.sh "Tiempo cumplido: $titulo $total $units"
