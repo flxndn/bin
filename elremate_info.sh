@@ -110,4 +110,3 @@ case $accion in
 	;;
 	*) die "Acción ($accion) no reconocida."
 esac
-grep rotulo /tmp/kk.html  | sed "s/.*SUBASTA \(.*\)h<.*/\1/"
