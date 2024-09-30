@@ -3,8 +3,8 @@
 set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
-readonly prefijo_defecto="-";
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
+fichero_ip=~/.sendip.txt
 
 #-------------------------------------------------------------------------------
 usage() {
@@ -12,17 +12,14 @@ usage() {
 	cat <<EOF
 * $(basename "${BASH_SOURCE[0]}") 
 	* Uso
-		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -e elegidos arg1 [arg2...]
+		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
 
 	* Descipción
-		Script description here.
+		Envía la ip del equipo mediante ntfy.sh si ha cambiado respecto a la que hay en $fichero_ip
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -e, --elegidos	:: Lista de etiquetas elegidas separadas por comas (sin espacios).
-		- -f, --prefijo	''prefijo'' :: Prefijo que se añade a los seleccionados en el listado de fzf. :: Por defecto es ''$prefijo_defecto''.
-		- -p, --preview ''comando'' :: Comando que se usará para previsualizar la opción elegida.
 EOF
 	exit
 }
@@ -58,31 +55,12 @@ die() {
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	elegidos=''
-	prefijo=$prefijo_defecto
-	opcion_comando=''
-	opcion_preview=''
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-e | --elegidos) # example named parameter
-			set -x
-			elegidos="${2-}"
-			set +x
-			shift
-			;;
-		-f | --prefijo) 
-			prefijo="${2-}"
-			shift
-			;;
-		-p | --preview) 
-			opcion_comando="--preview"
-			opcion_preview='echo {} | sed "s/'$prefijo'//" | '"${2-}"
-			shift
-			;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -92,7 +70,6 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
@@ -102,39 +79,14 @@ parse_params "$@"
 setup_colors
 
 # script logic here
-IFS=","
-elegidos_arr=($elegidos)
-opciones=("${args[@]}")
-# Me quedo con los argumentos que no estén elegidos
-for elegido in ${elegidos_arr[@]}; do
-	declare -a tmp=()
-	for opcion in ${opciones[@]}; do
-		if [ $opcion != $elegido ]; then
-			tmp+=($opcion)
-		fi
-	done
-	opciones=("${tmp[@]}")
-done
-opciones_totales=$( (for i in ${elegidos_arr[@]} ; do echo $prefijo$i; done; for i in ${opciones[@]}; do echo $i; done ) | fzf --multi $opcion_comando $opcion_preview )
+ipactual=$(hostname -I) 
+ipexterna=$(dig +short myip.opendns.com @resolver1.opendns.com)
+ips="$ipactual:$ipexterna"
+[ -e $fichero_ip ] || touch $fichero_ip
 
-declare -a a_eliminar=()
-IFS=$'\n'
-for fzflegido in $opciones_totales ; do 
-	if [[ "$fzflegido" =~ ^$prefijo.* ]]; then
-		a_eliminar+=($fzflegido)
-	else
-		echo $fzflegido
-	fi
-done
-for i in "${elegidos_arr[@]}"; do
-	encontrado=''
-	for j in "${a_eliminar[@]}";do
-		j=$(echo $j | sed "s/^$prefijo//");
-		if [ $i == $j ]; then
-			encontrado=1;
-		fi
-	done
-	if [ ! "$encontrado" ]; then
-		echo $i; 
-	fi
-done
+if [ "$(cat $fichero_ip)" = "$ips" ] ; then
+	touch $fichero_ip
+else
+	echo "$ips" > $fichero_ip
+	/home/felix/bin/ntfy.sh "$ips" 
+fi
