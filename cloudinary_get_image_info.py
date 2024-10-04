@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys, pprint, os, json, getopt
 
 #-------------------------------------------------------------------------------
 def ayuda():
 #-------------------------------------------------------------------------------
-	print '''* cloudinary_get_image_info.py
+	ayuda='''* cloudinary_get_image_info.py
 	* Uso
 		> cloudinary_get_image_info.py -h
 		> cloudinary_get_image_info.py [opciones] fichero_json_imagen_grande [fichero_json_imagen_pequeña]
@@ -19,6 +19,7 @@ def ayuda():
 		- -y| --yaml :: Saca la imagen en formato imagen de yaml (para secciones).
 		- -d| --debug :: Saca los datos de la imagen que se han leído.
 	'''
+	print(ayuda)
 #-------------------------------------------------------------------------------
 def procesa(file):
 #-------------------------------------------------------------------------------
@@ -39,14 +40,14 @@ def print_debug(info):
 #-------------------------------------------------------------------------------
 def print_yaml(info):
 #-------------------------------------------------------------------------------
-	print "- título: "+ unicode(info['img']['data']['context']['custom']['caption']).encode('utf8')
-	print "  texto: "
-	print "  mini: " + unicode(info['thumb']['data']['secure_url']).encode('utf8')
-	print "  maxi: " + unicode(info['img']['data']['secure_url']).encode('utf8')
+	print("- título: "+ info['img']['data']['context']['custom']['caption'])
+	print("  texto: ")
+	print("  mini: " + info['thumb']['data']['secure_url'])
+	print("  maxi: " + info['img']['data']['secure_url'])
 #-------------------------------------------------------------------------------
 def print_sectxt(info):
 #-------------------------------------------------------------------------------
-	print "{{" + unicode(info['thumb']['data']['secure_url']).encode('utf8') + "|"+ unicode(info['img']['data']['context']['custom']['caption']).encode('utf8') + "|" + unicode(info['img']['data']['secure_url']).encode('utf8') + "}}"
+	print("{{" + info['thumb']['data']['secure_url'] + "|"+ info['img']['data']['context']['custom']['caption'] + "|" + info['img']['data']['secure_url']+"}}")
 #-------------------------------------------------------------------------------
 def main(argv):
 #-------------------------------------------------------------------------------
@@ -54,7 +55,7 @@ def main(argv):
 	try:
 		opts, args = getopt.getopt(argv, "hsyd", ["help", 'sectxt', 'yaml', 'debug'])
 	except getopt.GetoptError:
-		print "Error"
+		print("Error")
 		ayuda()
 		sys.exit(2)
 	for opt, arg in opts:

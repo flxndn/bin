@@ -8,31 +8,23 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 #-------------------------------------------------------------------------------
 usage() {
 #-------------------------------------------------------------------------------
-	nombre=$(basename "${BASH_SOURCE[0]}") 
-	cat << HELPEND
-* $nombre
+	cat <<EOF
+* $(basename "${BASH_SOURCE[0]}") 
 	* Uso
-		> $nombre [opciones] -d ''fichero_descripcion.txt'' img1 [img2 ... imgn]
-		> $nombre -h|--help
+		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
+
+	* Descipción
+		Script description here.
 
 	* Opciones
-		* -h | --help :: Muestra esta ayuda.
-		* -d | --descripcion ''fichero_descripcion.txt'' :: Usa la descripción de las imágenes que hay en el 
-		* -v | --verbose :: Saca la información de depuración por la salida de error estándar.
-		* -a | --autororate :: Rota automticamente las imágenes según la información exif.
-		* -n | --dry-run :: Simula el proceso pero sin enviar los archivo.
-		* -f | --folder ''carpeta'' :: Subcarpeta donde se guarda en cloudlinary.
-	
-	* Descripción
-		Las imágenes se guardan en cloudinary en el directorio ''carpeta''.
-
-		Como entrada tiene un fichero en el que la primera columna están los 
-		nombres de las imágenes y en la segunda columna está la descripción 
-		de la imagen.
-
-HELPEND
+		- -h, --help		:: Print this help and exit
+		- -v, --verbose		:: Print script debug info
+		- -s, --sectxt		:: Salida en formato sectxt. :: Es la opción por defecto
+		- -y, --yaml		:: Salida en formato yaml.
+EOF
+	exit
 }
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 cleanup() {
 #-------------------------------------------------------------------------------
 	trap - SIGINT SIGTERM ERR EXIT
@@ -64,20 +56,15 @@ die() {
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	dryrun=0
-	autororate=0
-	fichero_descripcion=''
-	folder=
+	formato=sectxt
 
 	while :; do
 		case "${1-}" in
-		-h | --help) usage; exit 0 ;;
+		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-a | --autororate) autororate=1 ;; 
-		-f | --folder) folder="${2-}"; shift ;;
-		-n | --dry-run) dryrun=1 ;; 
-		-d | --descripcion) fichero_descripcion="${2-}"; shift ;;
+		-s | --sectxt) formato=sectxt ;; # example flag
+		-y | --yaml) formato=yaml ;; # example flag
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -87,9 +74,7 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${fichero_descripcion-}" ]] && die "Missing required parameter: fichero_descripcion"
-	[[ -z "${folder-}" ]] && die "Missing required parameter: folder"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+	#[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
@@ -100,24 +85,7 @@ setup_colors
 
 # script logic here
 
-for img in ${args[@]}; do
-	[ $autororate -eq 1 ] && exiftool -q -Orientation= -overwrite_original $img
-	#[ $folder = "" ] && folder=$(basename $(dirname $(realpath $img)))
-	basename="$(basename $img)"
-	titulo="$(grep '^'"$basename"$'\t' "$fichero_descripcion" | cut -f2-)"
-	if [ $dryrun -eq 0 ]; then
-		cloudinary_upload.sh \
-			--folder $folder \
-			--public_id "${basename%.*}" \
-			--title "$titulo" \
-			--miniature \
-			"$basename";
-	else
-		echo cloudinary_upload.sh \
-			--folder $folder \
-			--public_id "${basename%.*}" \
-			--title "$titulo" \
-			--miniature \
-			"$basename";
-	fi
+for i in $(find . -name \*.json | grep -v thumb|sort); do 
+	t=${i%.json}.thumb.json;  
+	cloudinary_get_image_info.py --$formato $i $t; 
 done 
