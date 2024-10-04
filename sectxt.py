@@ -1,1 +1,0 @@
-/home/felix/Documentos/personal/sectxt_git/sectxt.py
