@@ -5,10 +5,10 @@ case $1 in
   0) exit;;
   1) mogrify -rotate "-90" "$2"; exit;;
   2) mogrify -rotate "90" "$2"; exit;;
-  3) gimp "$2";exit;;
-  4) pinta "$2";exit;;
-  5) jhead "$2";exit;;
-  6) gvim "$2.txt"; exit;;
+  3) echo "$2" | ts %Y%m%d%H%M%S$'\t' | sed "s/ //" >> .qiv.log; exit;;
+  4) echo "$2" | ts %Y%m%d%H%M%S$'\t' | sed "s/ //" > .qiv.log; exit;;
+  5) exit;;
+  6) exit;;
   7) exit;;
   8) exit;;
   9) exit;;

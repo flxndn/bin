@@ -19,7 +19,6 @@ function ayuda {
 		- -d | --description descripcion :: Descripción de la imagen
 		- -f | --folder folder :: Carpeta de cloudinary donde se guardará.
 		- -m | --miniature :: Crea y sube una miniatura de la imagen.
-		- -o | --output_filename output_filename :: Nombre del fichero de salida que se obtiene. :: Si no se especifica el nombre es la fecha actual en formato folder_identificador_yyyy-mm-dd-hh-ii-ss.json
 
 	* Referencias
 		- [[https://support.cloudinary.com/hc/en-us/community/posts/360000183051-File-upload-using-curl- File upload using curl]]
@@ -47,7 +46,7 @@ function sendfile {
 	plain_signature="$plain_signature&timestamp=$timestamp$api_secret_key";
 
 	signature=$(echo -n $plain_signature| sha1sum| cut -f1 -d' ');
-	curl https://api.cloudinary.com/v1_1/$cloud_name/image/upload \
+	curl --silent https://api.cloudinary.com/v1_1/$cloud_name/image/upload \
 		-X POST \
 		-F "file=@$url_image" \
 		-F "timestamp=$timestamp" \
@@ -74,14 +73,13 @@ parsearg(){
 			--folder)			args="${args}-f ";;
 			--description)		args="${args}-d ";;
 			--miniature)		args="${args}-m ";;
-			--output_filename)	args="${args}-o ";;
 			*) [[ "${arg:0:1}" == "-" ]]  || delim="\""
 				args="${args}${delim}${arg}${delim} ";;
 		esac
 	done
 
 	eval set --  $args
-	while getopts "hi:t:T:f:d:mo:" OPTION; do
+	while getopts "hi:t:T:f:d:m" OPTION; do
 		case $OPTION in
 			h) ayuda; exit;;
 			i) readonly PUBLIC_ID="$OPTARG";;
@@ -90,7 +88,6 @@ parsearg(){
 			f) readonly FOLDER="$OPTARG";;
 			d) readonly DESCRIPTION="$OPTARG";;
 			m) readonly MINIATURE=1;;
-			o) readonly OUTPUT_FILENAME="$OPTARG";;
 		esac
 	done 
 	shift $(($OPTIND - 1))
@@ -114,12 +111,9 @@ if [  -z $PUBLIC_ID ]; then
 	exit 2
 fi 
 
-if [ ! -e "$OUTPUT_FILENAME" ]; then
-	readonly OUTPUT_FILENAME="${FOLDER}_${PUBLIC_ID}_$(date +%Y-%m-%d-%H-%M-%S)"
-fi
-
 context="alt=$DESCRIPTION|caption=$TITLE"
-sendfile "$url_image" "$PUBLIC_ID" "$TAGS" "$context" > "$OUTPUT_FILENAME.json"
+echo -n "{\"img\":"
+sendfile "$url_image" "$PUBLIC_ID" "$TAGS" "$context"
 
 if [ ! -z $MINIATURE ]; then
 	url_image_miniatura=$(mktemp --suffix=.${url_image##*.})
@@ -130,6 +124,7 @@ if [ ! -z $MINIATURE ]; then
 	else
 		tags_miniatura="$TAGS,miniatura";
 	fi
-
-	sendfile "$url_image_miniatura" "$public_id_miniatura" "$tags_miniatura" "$context" > "${OUTPUT_FILENAME}.thumb.json"
+	echo -n ",\"thumb\":"
+	sendfile "$url_image_miniatura" "$public_id_miniatura" "$tags_miniatura" "$context"
+	echo -n "}"
 fi

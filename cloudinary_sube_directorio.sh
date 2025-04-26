@@ -111,7 +111,7 @@ for img in ${args[@]}; do
 			--public_id "${basename%.*}" \
 			--title "$titulo" \
 			--miniature \
-			"$basename";
+			"$basename" > "$basename.json";
 	else
 		echo cloudinary_upload.sh \
 			--folder $folder \

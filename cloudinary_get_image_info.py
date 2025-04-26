@@ -8,7 +8,7 @@ def ayuda():
 	ayuda='''* cloudinary_get_image_info.py
 	* Uso
 		> cloudinary_get_image_info.py -h
-		> cloudinary_get_image_info.py [opciones] fichero_json_imagen_grande [fichero_json_imagen_pequeña]
+		> cloudinary_get_image_info.py [opciones] fichero_json_imagen
 	* Descripción
 		Saca en formato yaml (compatible con libros.yaml) de las imágenes que 
 		se han subido con cloudinary_upload.sh y que han generado los 
@@ -21,15 +21,22 @@ def ayuda():
 	'''
 	print(ayuda)
 #-------------------------------------------------------------------------------
-def procesa(file):
+def procesa(args):
 #-------------------------------------------------------------------------------
 	info={}
-	info['file']=file
-	try:
-		with open(file, "r") as read_file:
-			info['data'] = json.load(read_file) 
-	except:
-		print("El fichero %s no existe." % (file))
+	if len(args) == 1 :
+		info['file']='stdin'
+	else:
+		info['file']=args[1]
+
+	if len(args) == 1 :
+		info['data'] = json.load(sys.stdin)
+	else:
+		try:
+			with open(args[1], "r") as read_file:
+				info['data'] = json.load(read_file) 
+		except:
+			print("El fichero %s no existe." % (args[1]))
 
 	return info
 #-------------------------------------------------------------------------------
@@ -40,10 +47,15 @@ def print_debug(info):
 #-------------------------------------------------------------------------------
 def print_yaml(info):
 #-------------------------------------------------------------------------------
-	print("- título: "+ info['img']['data']['context']['custom']['caption'])
-	print("  texto: ")
-	print("  mini: " + info['thumb']['data']['secure_url'])
-	print("  maxi: " + info['img']['data']['secure_url'])
+	if 'alt' in  info['data']['img']['context']['custom'] :
+		text=info['data']['img']['context']['custom']['alt']
+	else:
+		text=''
+
+	print("          - título: "+ info['data']['img']['context']['custom']['caption'])
+	print("            texto: "+ text)
+	print("            mini: " + info['data']['thumb']['secure_url'])
+	print("            maxi: " + info['data']['img']['secure_url'])
 #-------------------------------------------------------------------------------
 def print_sectxt(info):
 #-------------------------------------------------------------------------------
@@ -69,16 +81,7 @@ def main(argv):
 		if opt in ("-s", "--sectxt"):
 			accion='sectxt'
 
-	file=args[0]
-	if len(args)>1:
-		file_thumb=args[1]
-	else:
-		filename, extension = os.path.splitext(file)
-		file_thumb=filename + '.thumb' + extension
-
-	info={}
-	info['img']=procesa(file)
-	info['thumb']=procesa(file_thumb)
+	info=procesa(argv)
 
 	if accion == 'yaml':
 		print_yaml(info)
@@ -89,4 +92,4 @@ def main(argv):
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 if __name__ == "__main__":
-	main(sys.argv[1:])
+	main(sys.argv)
