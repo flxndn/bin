@@ -14,7 +14,7 @@ usage() {
 		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
 
 	* Descipción
-		Script description here.
+		Lee los ficheros json generados al subir las imágenes y las convierte a formato sectxt o yaml.
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
