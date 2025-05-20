@@ -1,5 +1,4 @@
 #!/bin/bash
-
 conf=~/.ntfy.rc
 # aquí está definida la variable canal
 
