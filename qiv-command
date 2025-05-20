@@ -1,17 +1,38 @@
 #!/bin/bash
 ### syntax: qiv-command [pushed_number] [image_filename_with_full_path]
+#-------------------------------------------------------------------------------
+bck(){
+#-------------------------------------------------------------------------------
+	file="$1"
+	cp "$1" "$1.back"
+}
+#-------------------------------------------------------------------------------
+ubck(){
+#-------------------------------------------------------------------------------
+	back="$1.back"
+	file="$1"
+	if [ -e "$back" ]; then
+		tmp=$(mktemp)
+		mv "$file" "$tmp"
+		mv "$back" "$file"
+		mv "$tmp" "$back"
+	else
+		echo "El fichero $2 no tiene copia de seguridad"
+	fi
+}
+#-------------------------------------------------------------------------------
 
 case $1 in
-  0) exit;;
-  1) mogrify -rotate "-90" "$2"; exit;;
-  2) mogrify -rotate "90" "$2"; exit;;
-  3) gimp "$2";exit;;
-  4) pinta "$2";exit;;
+  0) ubck "$2";exit;;
+  1) bck "$2"; mogrify -rotate "-90" "$2"; exit;;
+  2) bck "$2"; mogrify -rotate "90" "$2"; exit;;
+  3) echo "$2" >> .qiv.log; exit;;
+  4) echo "$2" > .qiv.log; exit;;
   5) jhead "$2";exit;;
   6) gvim "$2.txt"; exit;;
   7) exit;;
   8) exit;;
-  9) exit;;
+  9) bck "$2"; mogrify -normalize "$2"; exit;;
   *) echo "Pulse una tecla del 0 al 9"; exit ;;
 esac
  

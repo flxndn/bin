@@ -23,8 +23,8 @@ usage() {
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -f, --flag		:: Some flag description
-		- -p, --param		:: Some param description
+		- -f, --fichero fichero.dat		:: Fichero dónde están los datos
+		- -t, --tag	tagsaih	:: Tag de la señal a examinar.
 EOF
 	exit
 }
@@ -60,19 +60,16 @@ die() {
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	flag=0
-	param=''
+	tag=''
+	fichero=''
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-f | --flag) flag=1 ;; # example flag
-		-p | --param) # example named parameter
-			param="${2-}"
-			shift
-			;;
+		-f | --fichero) fichero="${2-}"; shift ;;
+		-t | --tag) tag="${2-}"; shift ;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -82,19 +79,32 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${param-}" ]] && die "Missing required parameter: param"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+	[[ -z "${fichero-}" ]] && die "Missing required parameter: fichero"
+	[[ -z "${tag-}" ]] && tag=$(cat $fichero | cut -f2 -d\; | sort | uniq -c | fzf| cut -c9-)
+	[[ -z "${tag-}" ]] && die "Missing required parameter: tag"
+	#[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
 #-------------------------------------------------------------------------------
+informe() {
+#-------------------------------------------------------------------------------
+	t=$1
+	grep $t cef_aca_piezometros/ACA_Piezometros.rel || echo "Error. $t no está en el directorio rel"
+	grep $t $fichero| cut -f4 -d\; | youplot line 2>&1 
+	grep $t $fichero| cut -f3,4 -d\; 
+}
 #-------------------------------------------------------------------------------
 parse_params "$@"
 setup_colors
 
 # script logic here
+if [ $tag = "0" ]; then
+	for t in $(cat $fichero | cut -f2 -d\; | sort| uniq); do
+		echo "# tag=$t"
+		informe $t
+	done
+else
+	informe $tag
+fi
 
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- flag: ${flag}"
-msg "- param: ${param}"
-msg "- arguments: ${args[*]-}"

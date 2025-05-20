@@ -18,13 +18,13 @@ usage() {
 		Utilidades para tratar ficheros CEF.
 
 	* ORDEN
-		- i, insert :: Inserta una línea en el fichero CEF.
+		- i, insert :: Inserta una línea en el fichero CEF. :: Son obligatorias las opciones -T, -V, [-f|-F]
 		- n, nombre :: Devuelve el nombre de un fichero CEF basado en el prefijo y la fecha.
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -p, --prefijo		:: Prefijo del fichero CEF.
+		- -p, --prefijo		:: Prefijo del fichero CEF. :: Lo ficheros generados tienen el prefijo + _ + fecha + .txt
 		- -d, --directorio	:: Directorio del fichero CEF
 		- -f, --fecha		:: Fecha de la medida. :: Tiene que venir en un formato compatible con el comando date.
 		- -F, --fecha-europea		:: Fecha dei la medida. :: Formato dd/mm/AAAATHH:MM:SS :: La T puede ser un espacio.
@@ -133,6 +133,11 @@ f_nombre() {
 #-------------------------------------------------------------------------------
 f_insert() {
 #-------------------------------------------------------------------------------
+	dirlog=~/var/log/cef
+	[ -d $dirlog ] || mkdir -p $dirlog || die "No puedo crear el directorio $dirlog"
+	dia_iso=$(date -d "$fecha" +"%Y-%m-%d")
+	fichero_log=$dirlog/$dia_iso.txt
+
 	fichero=$(f_nombre)
 	fecha_europea=$(date -d "$fecha" +"%d/%m/%Y %H:%M:%S")
 	if [ "${valor:0:1}" = "." ]; then valor="0$valor"; fi
@@ -143,6 +148,7 @@ f_insert() {
 			fecha=$(date -d "$fecha 15 minutes" --iso-8601=seconds)
 			fecha_europea=$(date -d "$fecha" +"%d/%m/%Y %H:%M:%S")
 			echo "$tipo;$tag;$fecha_europea;$valor_con_coma;BUENA" >> "$fichero"
+			echo "$prefijo;$tipo;$tag;$fecha_europea;$valor_con_coma;BUENA" >> "$fichero_log"
 		done
 	fi
 	unix2dos "$fichero" 2>/dev/null
