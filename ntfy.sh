@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 conf=~/.ntfy.rc
 # aquí está definida la variable canal
 
@@ -8,7 +9,13 @@ urlbase=ntfy.sh
 
 url=$urlbase/$canal
 
-if [ "$1" = "-S"  ] || [ "$i" = "--silent" ]; then
+if [ "$1" = "-h"  ] || [ "$1" = "--help" ]; then
+
+	echo "Uso: ntfy.sh [-S|--silent] 'texto a notificar'"
+	exit 0
+fi
+
+if [ "$1" = "-S"  ] || [ "$1" = "--silent" ]; then
 	silencio=1; 
 	shift 
 else
