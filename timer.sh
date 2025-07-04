@@ -11,7 +11,8 @@ usage() {
   cat <<EOF
 * $(basename "${BASH_SOURCE[0]}")
 	* Uso
-		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-s] [-m] time
+		> $(basename "${BASH_SOURCE[0]}") [-g] [-v] [-s] [-m] time
+		> $(basename "${BASH_SOURCE[0]}") [-h]
 
 	* Descripción
 		Realiza una cuentaatrás desde time hasta cero.
@@ -25,6 +26,7 @@ usage() {
 		- -s, --seconds	:: El tiempo se expresa en segundos.
 		- -n, --notify	:: Genera un aviso del sistema.
 		- -u, --titulo ''titulo'' :: Título de la notificación. ::  Por defecto se usa ''Timer''.
+		- -n, --notify	:: Notifica al sistema que ha acabado.
 EOF
   exit
 }
