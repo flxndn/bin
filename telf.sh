@@ -77,11 +77,12 @@ main() {
 	case $COMMAND in
 		e) vi $entradas
 			;;
-		*) if [ "x$PARAMS" = "x" ]; then
-				grep "^[^#]" $dir/*.* | fzf --preview='figlet -f banner {}'
-			else
-				grep "^[^#]" $dir/*.* | grep $OPCIONES_GREP $PARAMS | fzf --preview='figlet -f banner {}'
-			fi
+		*)
+			grep "^[^#]" $dir/*.* \
+			| ( [ "$PARAMS" = "" ] && cat || grep $OPCIONES_GREP $PARAMS) \
+			| fzf --preview='echo {} | konwert UTF8-iso1 | figlet -f mono9 {}' \
+			| konwert UTF8-iso1 \
+			| figlet -f mono12
 			;;
 	esac
 } 
