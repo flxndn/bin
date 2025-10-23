@@ -85,8 +85,12 @@ check(){
 #-------------------------------------------------------------------------------
 	piezo="$1"
 	file="$2"
-	echo "#$piezo	$file"
+	rel="$3"
+	CEF=/mnt/scada/SAIHEBRO/Wapl/CEF
+	echo "#	$file"
 	grep -F "$piezo" "$file" || true
+	echo "#	$rel"
+	grep -F "$piezo" "$CEF/$rel" || true
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -95,14 +99,24 @@ parse_params "$@"
 setup_colors
 
 for piezo in "${args[@]}"; do
-	echo $piezo
+	echo "#* $piezo"
 		d=/home/felix/ute/proyectos/repos/2022-06-piezo_miteco
 		f=vega_cotas_y_multiplicativos.csv
-		check "$piezo" "$d/$f"
+		rel=PIEZO_MITECO/ott-vega.rel
+		check "$piezo" "$d/$f" "$rel"
+
 		d=/home/felix/ute/proyectos/repos/2023-06-piezo_mtx_vega
 		f=mtx.conf
-		check "$piezo" "$d/$f"
+		rel=PIEZO_MTX_VEGA/mtx-vega.rel
+		check "$piezo" "$d/$f" "$rel"
+
 		d=/home/felix/ute/proyectos/repos/2024-01-piezo-mtx-ii
 		f=doc/PiezosMSenales.txt
-		check "$piezo" "$d/$f"
+		rel=PIEZO_MTX_VEGA/mtxii.rel
+		check "$piezo" "$d/$f" "$rel"
+
+		d=/home/felix/ute/proyectos/repos/2024-03-conversion_aca
+		f=senales.csv
+		rel=ACA_Piezometros/ACA_Piezometros.rel
+		check "$piezo" "$d/$f" "$rel"
 done

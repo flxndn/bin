@@ -25,6 +25,7 @@ usage() {
 		- -v, --verbose		:: Print script debug info
 		- -f, --fichero fichero.dat		:: Fichero dónde están los datos
 		- -t, --tag	tagsaih	:: Tag de la señal a examinar.
+		- -I, --interactive	:: Muestra interactivamente el archivo CEF seleccionado.
 EOF
 	exit
 }
@@ -62,6 +63,7 @@ parse_params() {
 	# default values of variables set from params
 	tag=''
 	fichero=''
+	orden='normal'
 
 	while :; do
 		case "${1-}" in
@@ -70,6 +72,7 @@ parse_params() {
 		--no-color) NO_COLOR=1 ;;
 		-f | --fichero) fichero="${2-}"; shift ;;
 		-t | --tag) tag="${2-}"; shift ;;
+		-I | --interactive) orden='interactive' ;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -80,8 +83,8 @@ parse_params() {
 
 	# check required params and arguments
 	[[ -z "${fichero-}" ]] && die "Missing required parameter: fichero"
-	[[ -z "${tag-}" ]] && tag=$(cat $fichero | cut -f2 -d\; | sort | uniq -c | fzf| cut -c9-)
-	[[ -z "${tag-}" ]] && die "Missing required parameter: tag"
+	[ $orden == 'normal' ] && [[ -z "${tag-}" ]] && tag=$(cat $fichero | cut -f2 -d\; | sort | uniq -c | fzf| cut -c9-)
+	[ $orden == 'normal' ] && [[ -z "${tag-}" ]] && die "Missing required parameter: tag"
 	#[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
@@ -99,7 +102,14 @@ parse_params "$@"
 setup_colors
 
 # script logic here
-if [ $tag = "0" ]; then
+if [ $orden = 'interactive' ]; then
+	#tag=$(cut -f2 -d\; "$fichero" | sort | uniq | fzf)
+	#grep $tag $fichero| cut -f4 -d\; | youplot line 2>&1 
+	#grep $tag $fichero | batcat -l csv
+	cut -f2 -d\; "$fichero" | sort | uniq | fzf --preview='
+	grep {} '$fichero'| cut -f4 -d\; | youplot --color-output line 2>&1;
+	grep {} '$fichero'| batcat --color=always -l csv'
+elif [ $tag = "0" ]; then
 	for t in $(cat $fichero | cut -f2 -d\; | sort| uniq); do
 		echo "# tag=$t"
 		informe $t

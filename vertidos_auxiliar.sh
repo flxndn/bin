@@ -1,4 +1,5 @@
 #!/bin/bash
+IFS=$'\n'
 dir_base="/home/felix/ute/proyectos/2017-08-file2idor"
 dir_pendientes="$dir_base/pendientes"
 dir_dict="$dir_base/dic"
@@ -69,14 +70,17 @@ while [ "x$1" != "x" ]; do
 	fi
 	if [ "x$1" = "x-d" ] || [ "x$1" = "x--dict" ]; then
 		for d in $(find . -name \*.rel);do
+			set -x
 			destino="$dir_dict/$(basename $d)";
 			if [ ! -e $destino ]; then
 				mv -v $d $dir_dict;
 			else 
-				echo "Diccionario igual al anterior"; \
-				diff -q $d $destino >/dev/null \
-				&& rm $d \
-				|| vimdiff $d $destino
+				if diff -q $d $destino >/dev/null ; then
+					#echo "Diccionario igual al anterior"; 
+					rm -i $d 
+				else
+					vimdiff $d $destino
+				fi
 			fi
 			touch $destino
 		done

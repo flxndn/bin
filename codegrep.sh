@@ -4,7 +4,7 @@ declare -a extensiones=(Makefile '*.sh' '*.bash' \
 							'*.pl' '*.php' '*.js' '*.htm' '*.html' \
 							'*.css' '*.cpp' '*.py' '*.java' '*.jrxml' \
 							'*.xml' '*.xsl' '*.c' '*.h' '*.frm' '*.vb' \
-							'*.svg' )
+							'*.svg' "*.hbs")
 
 lista=""
 listainames=""
@@ -56,4 +56,4 @@ done
 
 IFS=$'\n'
 #grep -a $caseoption $lineoption "$cadena_a_buscar" $(eval "find . $listainames")
-eval "find .  $listainames"| xargs -d'\n' grep -a $caseoption $lineoption "$cadena_a_buscar" 
+eval "find . -type f \( $listainames \)"| xargs -d'\n' grep -a $caseoption $lineoption "$cadena_a_buscar" 

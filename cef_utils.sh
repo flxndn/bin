@@ -32,6 +32,7 @@ usage() {
 		- -T, --tag			:: Tag de la señal.
 		- -V, --valor		:: Valor de la señal.
 		- --h2q				:: Horario a quinceminuta, inserta el valor de la fecha y los tres quiceminutales siguientes. :: Para cuando se dan valores horarios y hay que convertir a quinceminutal.
+		- --precision ''periodo'' :: Precisión de la fecha en el nombre del archivo generado. :: ''periodo'' puede ser: dia (la opcion por defecto), hora o minuto.
 EOF
 	exit
 }
@@ -74,6 +75,7 @@ parse_params() {
 	tag=''
 	valor=''
 	h2q=0
+	periodo='dia'
 
 	while :; do
 		case "${1-}" in
@@ -96,6 +98,7 @@ parse_params() {
 		-T | --tag) tag="${2-}"; shift ;;
 		-V | --valor) valor="${2-}"; shift ;;
 		--h2q) h2q=1 ;;
+		--precision) periodo="${2-}"; shift;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -127,7 +130,13 @@ parse_params() {
 #-------------------------------------------------------------------------------
 f_nombre() {
 #-------------------------------------------------------------------------------
-	fecha_iso=$(date -d "$fecha" +"%Y%m%d")
+	case $periodo in 
+		dia) formato="%Y%m%d";;
+		hora) formato="%Y%m%d%H";;
+		minuto) formato="%Y%m%d%H%M";;
+		*) die "el periodo \"$periodo\" no soportado.";;
+	esac
+	fecha_iso=$(date -d "$fecha" +$formato)
 	echo "$directorio/${prefijo}_$fecha_iso.txt"
 }
 #-------------------------------------------------------------------------------
