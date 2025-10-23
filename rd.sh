@@ -77,15 +77,17 @@ main(){
 	shift $(( $OPTIND -1 ))
 
 	if [ -z "$1" ] ; then
-		select id in $(cut -f1 $CONFFILE); do
-			if [ "x$VERBOSE" = "x1" ]; then
-				echo "$PROGNAME $COLORES $GEOMETRY $OPCION_CONSOLA $id" | hexdump -C;
-			fi
-			$PROGNAME $COLORES $GEOMETRY $OPCION_CONSOLA $id;
-			break;
-		done
+		id=$(cut -f1 $CONFFILE| grep -v '^#' | fzf)
+		[ -n "$id" ] && $PROGNAME $COLORES $GEOMETRY $OPCION_CONSOLA $id
+		#select id in $(cut -f1 $CONFFILE); do
+			#if [ "x$VERBOSE" = "x1" ]; then
+				#echo "$PROGNAME $COLORES $GEOMETRY $OPCION_CONSOLA $id" | hexdump -C;
+			#fi
+			#$PROGNAME $COLORES $GEOMETRY $OPCION_CONSOLA $id;
+			#break;
+		#done
 	else
-		rdesktop $COLORES $GEOMETRY -x 0x80 $OPCION_CONSOLA $(grep "^$1	" $CONFFILE|cut -f2-) &
+		rdesktop $COLORES $GEOMETRY -x 0x80 $OPCION_CONSOLA $(grep "^$1	" $CONFFILE|cut -f2-)
 	fi 
 }
 #------------------------------------------------------------------------------- 

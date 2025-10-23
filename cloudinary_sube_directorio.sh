@@ -104,20 +104,20 @@ for img in ${args[@]}; do
 	[ $autororate -eq 1 ] && exiftool -q -Orientation= -overwrite_original $img
 	#[ $folder = "" ] && folder=$(basename $(dirname $(realpath $img)))
 	basename="$(basename $img)"
-	titulo="$(grep '^'"$basename"$'\t' "$fichero_descripcion" | cut -f2-)"
+	titulo="$(grep '^'"$img"$'\t' "$fichero_descripcion" | cut -f2-)"
 	if [ $dryrun -eq 0 ]; then
 		cloudinary_upload.sh \
 			--folder $folder \
 			--public_id "${basename%.*}" \
 			--title "$titulo" \
 			--miniature \
-			"$basename" > "$basename.json";
+			"$img" > "$img.json";
 	else
 		echo cloudinary_upload.sh \
 			--folder $folder \
 			--public_id "${basename%.*}" \
 			--title "$titulo" \
 			--miniature \
-			"$basename";
+			"$img";
 	fi
 done 

@@ -26,14 +26,11 @@ def procesa(args):
 	info={}
 	if len(args) == 1 :
 		info['file']='stdin'
-	else:
-		info['file']=args[1]
-
-	if len(args) == 1 :
 		info['data'] = json.load(sys.stdin)
 	else:
+		info['file']=args[0]
 		try:
-			with open(args[1], "r") as read_file:
+			with open(args[0], "r") as read_file:
 				info['data'] = json.load(read_file) 
 		except:
 			print("El fichero %s no existe." % (args[1]))
@@ -63,9 +60,10 @@ def print_sectxt(info):
 #-------------------------------------------------------------------------------
 def main(argv):
 #-------------------------------------------------------------------------------
+	#import pdb; pdb.set_trace()
 	accion="yaml"
 	try:
-		opts, args = getopt.getopt(argv, "hsyd", ["help", 'sectxt', 'yaml', 'debug'])
+		opts, args = getopt.getopt(argv[1:], "hsyd", ["help", 'sectxt', 'yaml', 'debug'])
 	except getopt.GetoptError:
 		print("Error")
 		ayuda()
@@ -81,7 +79,7 @@ def main(argv):
 		if opt in ("-s", "--sectxt"):
 			accion='sectxt'
 
-	info=procesa(argv)
+	info=procesa(args)
 
 	if accion == 'yaml':
 		print_yaml(info)
