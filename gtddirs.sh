@@ -4,6 +4,8 @@ set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
+dirbase=~/gtd
+cd $dirbase
 
 #-------------------------------------------------------------------------------
 usage() {
@@ -14,13 +16,13 @@ usage() {
 		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
 
 	* Descipción
-		Lee los ficheros json generados al subir las imágenes y las convierte a formato sectxt o yaml.
+		Gestión de GTD basada en directorios.
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -s, --sectxt		:: Salida en formato sectxt. :: Es la opción por defecto
-		- -y, --yaml		:: Salida en formato yaml.
+		- -i, --insert		:: Inserta una nueva tarea.
+		- -d, --subdirectorio	:: Selecciona un subdirectorio.
 EOF
 	exit
 }
@@ -56,15 +58,20 @@ die() {
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	formato=sectxt
+	accion='lista'
+	subdirectorio=''
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-s | --sectxt) formato=sectxt ;; # example flag
-		-y | --yaml) formato=yaml ;; # example flag
+		-i | --insert) accion='insertar' ;; # example flag
+		-l | --lista) accion='lista' ;; # example flag
+		-s | --subdirectorio) # example named parameter
+			subdirectorio="${2-}"
+			shift
+			;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -73,8 +80,6 @@ parse_params() {
 
 	args=("$@")
 
-	# check required params and arguments
-	#[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
@@ -84,8 +89,30 @@ parse_params "$@"
 setup_colors
 
 # script logic here
+case "$accion" in
+	lista)
+		#find $dirbase -maxdepth 2 -type f 
+		f="$(find . -maxdepth 2 -type f | fzf --preview='batcat {}')"
+		subaccion=$(echo -e "editar\nfinalizar" | fzf)
+		echo "$subaccion $f"
+		case "$subaccion" in
+			editar)
+				vi "$f"
+				;;
+			finalizar)
+				mv "$f" "$(dirname "$f")/done"
+				;;
+		esac
+		;;
+	insertar)
+		if [ -z "$subdirectorio" ]; then
+			subdirectorio="$(basename "$(find $dirbase -maxdepth 1 -type d| fzf)")";
+		fi
+		echo -n "título?: "
+		read titulo
+		file="$dirbase/$subdirectorio/$(date +"%Y-%m-%d")-$titulo.sec"
+		echo -e "* $titulo\n\t* Descripcion\n\n\t* Resultados" > "$file"
+		vi "$file"
+	;;
+esac
 
-for i in $(find . -name \*.json | grep -v thumb|sort); do 
-	t=${i%.json}.thumb.json;  
-	cloudinary_get_image_info.py --$formato $i $t; 
-done 

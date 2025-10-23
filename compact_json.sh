@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-#[[http://redsymbol.net/articles/unofficial-bash-strict-mode/ Use Bash Strict Mode]]
-IFS=$'\n\t'
-
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
@@ -21,13 +18,12 @@ usage() {
 		> $script_name [-h] [-v] [-f] -p param_value arg1 [arg2...]
 
 	* Descipción
-		Script description here.
+		Para una entrada estándar que sea u json pretify compacta las líneas que tengan una indentación igual o mayor que el nivel máximo.
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -f, --flag		:: Some flag description
-		- -p, --param		:: Some param description
+		- -n, --nivel-maximo	:: Máximo nivel de expanxión
 EOF
 	exit
 }
@@ -56,15 +52,14 @@ die() {
 #-------------------------------------------------------------------------------
 	local msg=$1
 	local code=${2-1} # default exit status 1
-	msg "$script_name: $msg"
+	msg "$msg"
 	exit "$code"
 }
 #-------------------------------------------------------------------------------
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	flag=0
-	param=''
+	nive_maximo=4
 
 	while :; do
 		case "${1-}" in
@@ -72,7 +67,7 @@ parse_params() {
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
 		-f | --flag) flag=1 ;; # example flag
-		-p | --param) param="${2-}"; shift ;;
+		-n | --nivel-maximo) nive_maximo="${2-}"; shift ;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -82,8 +77,8 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${param-}" ]] && die "Missing required parameter: param"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+	[[ -z "${nive_maximo-}" ]] && die "Missing required parameter: param"
+	#[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
@@ -93,8 +88,13 @@ parse_params "$@"
 setup_colors
 
 # script logic here
-
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- flag: ${flag}"
-msg "- param: ${param}"
-msg "- arguments: ${args[*]-}"
+inicio=$(printf "%${nive_maximo}s")
+IFS=$'\n'
+while read -r l; do
+	if [[ $l != "$inicio"* ]]; then
+		echo
+	else 
+		l=$(echo $l | sed "s/^  */ /")
+	fi
+	echo -n $l
+done

@@ -11,34 +11,30 @@ usage() {
   cat <<EOF
 * $(basename "${BASH_SOURCE[0]}")
 	* Uso
-		> $(basename "${BASH_SOURCE[0]}") [-g|t] [-u titulo] [-v] [-s|m] time
-		> $(basename "${BASH_SOURCE[0]}") [-h]
+		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
 
 	* Descripción
-		Realiza una cuentaatrás desde time hasta cero.
+		Saca los ficheros (la segunda columna) del fichero .qiv.log del directorio actual.
 
 	* Opciones
-		- -h, --help	:: Print this help and exit
-		- -v, --verbose	:: Print script debug info
-		- -t, --text	:: Saca el resultado como texto. :: Es la opción por defecto.
-		- -g, --gauge	:: Saca el resultado con dialog guge.
-		- -m, --minutes	:: El tiempo se expresa en minutos. :: Es la opción por defecto.
-		- -s, --seconds	:: El tiempo se expresa en segundos.
-		- -n, --notify	:: Genera un aviso del sistema.
-		- -u, --titulo ''titulo'' :: Título de la notificación. ::  Por defecto se usa ''Timer''.
-		- -n, --notify	:: Notifica al sistema que ha acabado.
-		- -N, --ntfy	:: Notifica al servicio web ntfy.sh que ha acabado.
-		- -u, --titulo texto	:: Utiliza ''texto'' en los títulos y notificaciones. :: Si no se indica por defecto es ''Timer''
+		- -h, --help      :: Print this help and exit
+		- -v, --verbose   :: Print script debug info
+		- -f, --flag      :: Some flag description
+		- -d, --date ''fecha''	:: Solo saca los ficheros de esa fecha. :: Formato 20220730
+		- -t, --today	:: Solo saca los ficheros de hoy.
+		- -T, --tail ''cantidad''	:: Solo saca los últimos ''cantidad'' ficheros.
 EOF
   exit
 }
 #-------------------------------------------------------------------------------
+
 cleanup() {
 #-------------------------------------------------------------------------------
   trap - SIGINT SIGTERM ERR EXIT
   # script cleanup here
 }
 #-------------------------------------------------------------------------------
+
 setup_colors() {
 #-------------------------------------------------------------------------------
   if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
@@ -48,10 +44,12 @@ setup_colors() {
   fi
 }
 #-------------------------------------------------------------------------------
+
 msg() {
 #-------------------------------------------------------------------------------
   echo >&2 -e "${1-}"
 }
+
 #-------------------------------------------------------------------------------
 die() {
 #-------------------------------------------------------------------------------
@@ -60,29 +58,31 @@ die() {
   msg "$msg"
   exit "$code"
 }
+
 #-------------------------------------------------------------------------------
 parse_params() {
 #-------------------------------------------------------------------------------
   # default values of variables set from params
-  units=minutes
-  unitsa=m
-  method=text
-  notify=0
-  ntfy=0
-  titulo=Timer
+  flag=0
+  fecha=''
+  cantidad=''
 
   while :; do
     case "${1-}" in
     -h | --help) usage ;;
     -v | --verbose) set -x ;;
     --no-color) NO_COLOR=1 ;;
-    -m | --minutes) units=minutes; unitsa=m ;;
-    -s | --seconds) units=seconds unitsa=s;;
-    -g | --gauge) method=gauge ;;
-    -t | --text) method=text ;;
-    -n | --notify) notify=1 ;;
-    -N | --ntfy) ntfy=1 ;;
-    -u | --titulo) titulo="${2-}"; shift;;
+    -d | --date)
+      fecha="${2-}"
+      shift
+      ;;
+    -t | --today)
+      fecha=$(date +%Y%m%d)
+      ;;
+    -T | --tail) # example named parameter
+      cantidad="${2-}"
+      shift
+      ;;
     -?*) die "Unknown option: $1" ;;
     *) break ;;
     esac
@@ -90,10 +90,6 @@ parse_params() {
   done
 
   args=("$@")
-
-  # check required params and arguments
-  [[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
-
   return 0
 }
 #-------------------------------------------------------------------------------
@@ -102,19 +98,6 @@ parse_params() {
 parse_params "$@"
 setup_colors
 
-total=${args[0]}
-for i in $(seq $total -1 0); do 
-	if [ $method = 'text' ]; then
-		echo -n "$i	$units ";
-		date
-	else
-		# dialog gauge
-		percentage=$((100-i*100/total))
-		echo $percentage | dialog --title "$titulo" --gauge "Please wait $i $units" 10 60 0
-		#echo $percentage | dialog --title "$titulo" --gauge "Please wait $i $units" 10 60 0
-	fi
-	sleep 1$unitsa
-done
+# script logic here
 
-[ "$notify" = "1" ] && notify-send timer.sh "Tiempo cumplido: $titulo $total $units"
-[ "$ntfy" = "1" ] && ntfy.sh "Tiempo cumplido: $titulo $total $units"
+grep "$fecha" .qiv.log | { if [ -z $cantidad ]; then cat ; else tail -n $cantidad; fi } | cut -f2

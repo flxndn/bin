@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-#[[http://redsymbol.net/articles/unofficial-bash-strict-mode/ Use Bash Strict Mode]]
-IFS=$'\n\t'
-
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
@@ -26,8 +23,10 @@ usage() {
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -f, --flag		:: Some flag description
-		- -p, --param		:: Some param description
+		- -s, --lista-senales :: Busca en la tabla lista_senales. :: Es la opción por defecto.
+		- -r, --lista-remotas :: Busca en la tabla lista_remotas.
+		- -c, --campos		:: Campo buscado. :: El valor de campos por defecto es '*'.
+		- -t, --titulos		:: Muestra el título de las columnas.
 EOF
 	exit
 }
@@ -56,7 +55,7 @@ die() {
 #-------------------------------------------------------------------------------
 	local msg=$1
 	local code=${2-1} # default exit status 1
-	msg "$script_name: $msg"
+	msg "$msg"
 	exit "$code"
 }
 #-------------------------------------------------------------------------------
@@ -64,15 +63,19 @@ parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
 	flag=0
-	param=''
+	tabla=lista_senales
+	campos='*'
+	opcion_cabecera=''
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-f | --flag) flag=1 ;; # example flag
-		-p | --param) param="${2-}"; shift ;;
+		-s | --lista-senales) tabla=lista_senales;;
+		-r | --lista-remotas) tabla=lista_remotas;;
+		-t | --tiulos) opcion_cabecera="-c";;
+		-c | --campos) campos="${2-}"; shift;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -82,7 +85,7 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${param-}" ]] && die "Missing required parameter: param"
+	#[[ -z "${param-}" ]] && die "Missing required parameter: param"
 	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
@@ -92,9 +95,10 @@ parse_params() {
 parse_params "$@"
 setup_colors
 
-# script logic here
+case $tabla in 
+	lista_senales) campo_id=ls_tag_txt;;
+	lista_remotas) campo_id=lr_codigo_txt;;
+esac
 
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- flag: ${flag}"
-msg "- param: ${param}"
-msg "- arguments: ${args[*]-}"
+echo "SELECT $campos FROM $tabla WHERE $campo_id ='${args[0]}'" \
+| isql $opcion_cabecera -b -d$'\t' CHEINTR cheintr cheintr

@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-#[[http://redsymbol.net/articles/unofficial-bash-strict-mode/ Use Bash Strict Mode]]
-IFS=$'\n\t'
-
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
@@ -26,8 +23,9 @@ usage() {
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -f, --flag		:: Some flag description
-		- -p, --param		:: Some param description
+		- -f, --fichero fichero.dat		:: Fichero dónde están los datos
+		- -t, --tag	tagsaih	:: Tag de la señal a examinar.
+		- -I, --interactive	:: Muestra interactivamente el archivo CEF seleccionado.
 EOF
 	exit
 }
@@ -56,23 +54,25 @@ die() {
 #-------------------------------------------------------------------------------
 	local msg=$1
 	local code=${2-1} # default exit status 1
-	msg "$script_name: $msg"
+	msg "$msg"
 	exit "$code"
 }
 #-------------------------------------------------------------------------------
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	flag=0
-	param=''
+	tag=''
+	fichero=''
+	orden='normal'
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-f | --flag) flag=1 ;; # example flag
-		-p | --param) param="${2-}"; shift ;;
+		-f | --fichero) fichero="${2-}"; shift ;;
+		-t | --tag) tag="${2-}"; shift ;;
+		-I | --interactive) orden='interactive' ;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -82,19 +82,39 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${param-}" ]] && die "Missing required parameter: param"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+	[[ -z "${fichero-}" ]] && die "Missing required parameter: fichero"
+	[ $orden == 'normal' ] && [[ -z "${tag-}" ]] && tag=$(cat $fichero | cut -f2 -d\; | sort | uniq -c | fzf| cut -c9-)
+	[ $orden == 'normal' ] && [[ -z "${tag-}" ]] && die "Missing required parameter: tag"
+	#[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
 #-------------------------------------------------------------------------------
+informe() {
+#-------------------------------------------------------------------------------
+	t=$1
+	grep $t cef_aca_piezometros/ACA_Piezometros.rel || echo "Error. $t no está en el directorio rel"
+	grep $t $fichero| cut -f4 -d\; | youplot line 2>&1 
+	grep $t $fichero| cut -f3,4 -d\; 
+}
 #-------------------------------------------------------------------------------
 parse_params "$@"
 setup_colors
 
 # script logic here
+if [ $orden = 'interactive' ]; then
+	#tag=$(cut -f2 -d\; "$fichero" | sort | uniq | fzf)
+	#grep $tag $fichero| cut -f4 -d\; | youplot line 2>&1 
+	#grep $tag $fichero | batcat -l csv
+	cut -f2 -d\; "$fichero" | sort | uniq | fzf --preview='
+	grep {} '$fichero'| cut -f4 -d\; | youplot --color-output line 2>&1;
+	grep {} '$fichero'| batcat --color=always -l csv'
+elif [ $tag = "0" ]; then
+	for t in $(cat $fichero | cut -f2 -d\; | sort| uniq); do
+		echo "# tag=$t"
+		informe $t
+	done
+else
+	informe $tag
+fi
 
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- flag: ${flag}"
-msg "- param: ${param}"
-msg "- arguments: ${args[*]-}"

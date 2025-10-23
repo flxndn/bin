@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-#[[http://redsymbol.net/articles/unofficial-bash-strict-mode/ Use Bash Strict Mode]]
-IFS=$'\n\t'
-
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
@@ -18,16 +15,17 @@ usage() {
 	cat <<EOF
 * $script_name
 	* Uso
-		> $script_name [-h] [-v] [-f] -p param_value arg1 [arg2...]
+		> $script_name [-h] [-v] tag_piezometro [tag2...]
 
 	* Descipción
-		Script description here.
+		Mira en qué directorio hay datos de configuración de los piezómetros que se
+		indican como argumentos.
+
+		ESTÁ INCOMPLETO
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -f, --flag		:: Some flag description
-		- -p, --param		:: Some param description
 EOF
 	exit
 }
@@ -56,23 +54,19 @@ die() {
 #-------------------------------------------------------------------------------
 	local msg=$1
 	local code=${2-1} # default exit status 1
-	msg "$script_name: $msg"
+	msg "$msg"
 	exit "$code"
 }
 #-------------------------------------------------------------------------------
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	flag=0
-	param=''
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-f | --flag) flag=1 ;; # example flag
-		-p | --param) param="${2-}"; shift ;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -82,19 +76,47 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${param-}" ]] && die "Missing required parameter: param"
 	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
 }
 #-------------------------------------------------------------------------------
+check(){
+#-------------------------------------------------------------------------------
+	piezo="$1"
+	file="$2"
+	rel="$3"
+	CEF=/mnt/scada/SAIHEBRO/Wapl/CEF
+	echo "#	$file"
+	grep -F "$piezo" "$file" || true
+	echo "#	$rel"
+	grep -F "$piezo" "$CEF/$rel" || true
+}
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 parse_params "$@"
 setup_colors
 
-# script logic here
+for piezo in "${args[@]}"; do
+	echo "#* $piezo"
+		d=/home/felix/ute/proyectos/repos/2022-06-piezo_miteco
+		f=vega_cotas_y_multiplicativos.csv
+		rel=PIEZO_MITECO/ott-vega.rel
+		check "$piezo" "$d/$f" "$rel"
 
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- flag: ${flag}"
-msg "- param: ${param}"
-msg "- arguments: ${args[*]-}"
+		d=/home/felix/ute/proyectos/repos/2023-06-piezo_mtx_vega
+		f=mtx.conf
+		rel=PIEZO_MTX_VEGA/mtx-vega.rel
+		check "$piezo" "$d/$f" "$rel"
+
+		d=/home/felix/ute/proyectos/repos/2024-01-piezo-mtx-ii
+		f=doc/PiezosMSenales.txt
+		rel=PIEZO_MTX_VEGA/mtxii.rel
+		check "$piezo" "$d/$f" "$rel"
+
+		d=/home/felix/ute/proyectos/repos/2024-03-conversion_aca
+		f=senales.csv
+		rel=ACA_Piezometros/ACA_Piezometros.rel
+		check "$piezo" "$d/$f" "$rel"
+done

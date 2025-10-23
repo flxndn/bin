@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+base=$(mktemp)
+
+tesseract "$1" $base
+cat $base*.txt && rm $base*

@@ -1,17 +1,11 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-#[[http://redsymbol.net/articles/unofficial-bash-strict-mode/ Use Bash Strict Mode]]
-IFS=$'\n\t'
-
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 script_name=$(basename "${BASH_SOURCE[0]}")
 
-#for app in pon_aqui_las_dependencias_y_descomenta; do
-	 #which $app >/dev/null || die "$script_name depende de $app, instálela.";
-#done
 #-------------------------------------------------------------------------------
 usage() {
 #-------------------------------------------------------------------------------
@@ -21,13 +15,14 @@ usage() {
 		> $script_name [-h] [-v] [-f] -p param_value arg1 [arg2...]
 
 	* Descipción
-		Script description here.
+		Utilidades para fechas relacionadas con el año hidrológico.
+
+		La salida es la denominación (año inicia-año final, separados por un guión); fecha de inicio, en formato japonés; fecha final, en el mismo formato. Estos tres campos están separados por tabuladores.
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -f, --flag		:: Some flag description
-		- -p, --param		:: Some param description
+		- -f, --fecha fecha	:: Fecha para la que se quiere saber el año hidrológico. :: Tiene que ser compatible con gnu date -d . :: Si se omite se usa la fecha actual.
 EOF
 	exit
 }
@@ -56,23 +51,24 @@ die() {
 #-------------------------------------------------------------------------------
 	local msg=$1
 	local code=${2-1} # default exit status 1
-	msg "$script_name: $msg"
+	msg "$msg"
 	exit "$code"
 }
 #-------------------------------------------------------------------------------
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	flag=0
-	param=''
+	fecha=$(date +"%Y-%m-%d")
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-f | --flag) flag=1 ;; # example flag
-		-p | --param) param="${2-}"; shift ;;
+		-f | --fecha) 
+			fecha="${2-}"
+			shift
+			;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -81,10 +77,6 @@ parse_params() {
 
 	args=("$@")
 
-	# check required params and arguments
-	[[ -z "${param-}" ]] && die "Missing required parameter: param"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
-
 	return 0
 }
 #-------------------------------------------------------------------------------
@@ -92,9 +84,11 @@ parse_params() {
 parse_params "$@"
 setup_colors
 
-# script logic here
+ano=$(date -d "$fecha" +"%Y")
+if [ $(date -d "$fecha" +"%m") -lt 10 ]; then
+	ano=$((ano-1))
+fi
+anof=$((ano+1))
 
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- flag: ${flag}"
-msg "- param: ${param}"
-msg "- arguments: ${args[*]-}"
+
+echo "$ano-$anof	$ano-10-01	$anof-09-30"

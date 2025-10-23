@@ -8,31 +8,29 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 #-------------------------------------------------------------------------------
 usage() {
 #-------------------------------------------------------------------------------
-	nombre=$(basename "${BASH_SOURCE[0]}") 
-	cat << HELPEND
-* $nombre
+	cat <<EOF
+* $(basename "${BASH_SOURCE[0]}") 
 	* Uso
-		> $nombre [opciones] -d ''fichero_descripcion.txt'' img1 [img2 ... imgn]
-		> $nombre -h|--help
+		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-j|--formato-japonés|-e|--fecha-europeo] [fecha1] [fecha2...]
+
+	* Descipción
+		Devuelve el quinceminutal cercano a las fechas indicadas.
+
+		Las fechas tienen que estar en un formato entendible por el comando ''date''.
+
+		Si no se especifica ninguna fecha usa la actual.
 
 	* Opciones
-		* -h | --help :: Muestra esta ayuda.
-		* -d | --descripcion ''fichero_descripcion.txt'' :: Usa la descripción de las imágenes que hay en el 
-		* -v | --verbose :: Saca la información de depuración por la salida de error estándar.
-		* -a | --autororate :: Rota automticamente las imágenes según la información exif.
-		* -n | --dry-run :: Simula el proceso pero sin enviar los archivo.
-		* -f | --folder ''carpeta'' :: Subcarpeta donde se guarda en cloudlinary.
-	
-	* Descripción
-		Las imágenes se guardan en cloudinary en el directorio ''carpeta''.
-
-		Como entrada tiene un fichero en el que la primera columna están los 
-		nombres de las imágenes y en la segunda columna está la descripción 
-		de la imagen.
-
-HELPEND
+		- -h, --help		:: Print this help and exit
+		- -v, --verbose		:: Print script debug info
+		- -j, --formato-japones :: Saca las fechas en formato japonés (YYYY-MM-DD HH:mm:ss). :: Es la opción por defecto.
+		- -e, --formato-europeo :: Saca las fechas en formato europeo (DD/MM/YYYY HH:mm:ss). :: Es la opción por defecto.
+		- -c, --cercano :: Obtiene el quinceminital más cercano, tanto por exceso como por defecto. :: Es la opción por defecto.
+		- -i, --inferior :: Obtiene el quinceminital menor o igual a la fecha indicada.
+EOF
+	exit
 }
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
 cleanup() {
 #-------------------------------------------------------------------------------
 	trap - SIGINT SIGTERM ERR EXIT
@@ -64,20 +62,18 @@ die() {
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	dryrun=0
-	autororate=0
-	fichero_descripcion=''
-	folder=
+	formato="%d/%m/%Y %H:%M:%S";
+	metodo='cercano'
 
 	while :; do
 		case "${1-}" in
-		-h | --help) usage; exit 0 ;;
+		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-a | --autororate) autororate=1 ;; 
-		-f | --folder) folder="${2-}"; shift ;;
-		-n | --dry-run) dryrun=1 ;; 
-		-d | --descripcion) fichero_descripcion="${2-}"; shift ;;
+		-j | --formato-japones) formato="%Y-%m-%d %H:%M:%S";;
+		-e | --formato-europeo) formato="%d/%m/%Y %H:%M:%S";;
+		-c | --cercano) metodo="cercano";;
+		-i | --inferior) metodo="inferior";;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -87,9 +83,7 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${fichero_descripcion-}" ]] && die "Missing required parameter: fichero_descripcion"
-	[[ -z "${folder-}" ]] && die "Missing required parameter: folder"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+	[[ ${#args[@]} -eq 0 ]] && args+="$(date +"%Y-%m-%d %H:%M:%S")"
 
 	return 0
 }
@@ -98,26 +92,11 @@ parse_params() {
 parse_params "$@"
 setup_colors
 
-# script logic here
-
-for img in ${args[@]}; do
-	[ $autororate -eq 1 ] && exiftool -q -Orientation= -overwrite_original $img
-	#[ $folder = "" ] && folder=$(basename $(dirname $(realpath $img)))
-	basename="$(basename $img)"
-	titulo="$(grep '^'"$img"$'\t' "$fichero_descripcion" | cut -f2-)"
-	if [ $dryrun -eq 0 ]; then
-		cloudinary_upload.sh \
-			--folder $folder \
-			--public_id "${basename%.*}" \
-			--title "$titulo" \
-			--miniature \
-			"$img" > "$img.json";
-	else
-		echo cloudinary_upload.sh \
-			--folder $folder \
-			--public_id "${basename%.*}" \
-			--title "$titulo" \
-			--miniature \
-			"$img";
-	fi
-done 
+IFS=$'\n'
+for d in "${args[@]}"; do
+	seconds=$(date -d "$d" +%s)
+	if [ $metodo = 'cercano' ]; then delta=450; fi # 900 segundos / 2
+	if [ $metodo = 'inferior' ]; then delta=0; fi
+	secondsqm=$(( 900 *((seconds + delta) / 900) ))
+	date -d @$secondsqm +"$formato"
+done

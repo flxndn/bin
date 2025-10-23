@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-#[[http://redsymbol.net/articles/unofficial-bash-strict-mode/ Use Bash Strict Mode]]
-IFS=$'\n\t'
-
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
@@ -18,16 +15,15 @@ usage() {
 	cat <<EOF
 * $script_name
 	* Uso
-		> $script_name [-h] [-v] [-f] -p param_value arg1 [arg2...]
+		> $script_name [-h] [-v] arg1 [arg2...]
 
 	* Descipción
-		Script description here.
+		Hace una copia de los ficheros indicados como argumentos añadiendo un sufijo .~<numerp>~ 
+		asegurándose de no borrar ninguno.
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -f, --flag		:: Some flag description
-		- -p, --param		:: Some param description
 EOF
 	exit
 }
@@ -56,23 +52,19 @@ die() {
 #-------------------------------------------------------------------------------
 	local msg=$1
 	local code=${2-1} # default exit status 1
-	msg "$script_name: $msg"
+	msg "$msg"
 	exit "$code"
 }
 #-------------------------------------------------------------------------------
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	flag=0
-	param=''
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-f | --flag) flag=1 ;; # example flag
-		-p | --param) param="${2-}"; shift ;;
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -82,7 +74,6 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${param-}" ]] && die "Missing required parameter: param"
 	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
@@ -93,8 +84,11 @@ parse_params "$@"
 setup_colors
 
 # script logic here
-
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- flag: ${flag}"
-msg "- param: ${param}"
-msg "- arguments: ${args[*]-}"
+for file in "${args[@]}"; do
+	num=1; bf="$file.~$num~";
+	while [ -e $bf ]; do
+		num=$((num+1))
+		bf="$file.~$num~";
+	done
+	cp "$file" "$bf"
+done

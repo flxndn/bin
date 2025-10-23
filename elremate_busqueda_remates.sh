@@ -1,4 +1,5 @@
 #!/bin/bash
+#set -euo pipefail
 readonly url_base="http://www.elremate.es/busqueda_remates.php"
 
 #-------------------------------------------------------------------------------

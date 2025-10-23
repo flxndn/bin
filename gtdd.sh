@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-#[[http://redsymbol.net/articles/unofficial-bash-strict-mode/ Use Bash Strict Mode]]
-IFS=$'\n\t'
-
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 script_name=$(basename "${BASH_SOURCE[0]}")
+DIR=~/.gtdd
 
 #for app in pon_aqui_las_dependencias_y_descomenta; do
 	 #which $app >/dev/null || die "$script_name depende de $app, instálela.";
@@ -21,13 +19,13 @@ usage() {
 		> $script_name [-h] [-v] [-f] -p param_value arg1 [arg2...]
 
 	* Descipción
-		Script description here.
+		Trabaja con los ficheros de tareas que están en $DIR.
+
+		Por defecto trabaja de forma interactiva.
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -f, --flag		:: Some flag description
-		- -p, --param		:: Some param description
 EOF
 	exit
 }
@@ -56,7 +54,7 @@ die() {
 #-------------------------------------------------------------------------------
 	local msg=$1
 	local code=${2-1} # default exit status 1
-	msg "$script_name: $msg"
+	msg "$msg"
 	exit "$code"
 }
 #-------------------------------------------------------------------------------
@@ -82,19 +80,39 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ -z "${param-}" ]] && die "Missing required parameter: param"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
 	return 0
+}
+#-------------------------------------------------------------------------------
+interactivo() {
+#-------------------------------------------------------------------------------
+	ordenes=("ls - Listado de tareas" "mv - Cambia es estado de las tareas" "ex - Salir")
+
+	while true; do
+		orden=$(printf '%s\n' "${ordenes[@]}" | fzf --no-sort| cut -f1 -d' ')
+
+		case $orden in 
+		ls)
+			dir1=$(find $DIR -maxdepth 1 -mindepth 1 -type d|fzf)
+			vi -O $dir1/*.sec
+			;;
+		mv)
+			dir1=$(find $DIR -maxdepth 1 -mindepth 1 -type d|fzf)
+			file=$(find $dir1 -maxdepth 1 -mindepth 1 -type f|fzf)
+			dir2=$(find $DIR -maxdepth 1 -mindepth 1 -type d|fzf)
+			mv "$file" "$dir2"
+			;;
+		ex)
+			exit 0
+			;;
+		*) die "Orden $orden no reconocida.";
+			;;
+		esac
+	done
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 parse_params "$@"
 setup_colors
 
-# script logic here
-
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- flag: ${flag}"
-msg "- param: ${param}"
-msg "- arguments: ${args[*]-}"
+interactivo

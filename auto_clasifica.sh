@@ -3,7 +3,6 @@
 set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
-readonly prefijo_defecto="-";
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 
 #-------------------------------------------------------------------------------
@@ -12,17 +11,22 @@ usage() {
 	cat <<EOF
 * $(basename "${BASH_SOURCE[0]}") 
 	* Uso
-		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -e elegidos arg1 [arg2...]
+		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-c fichero_cache -g dir1 [dir2 ... dir_n]
+		> $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-c fichero_cache  file1 [file2 ... file_n]
 
 	* Descipción
-		Script description here.
+		Si está activada la opción -g|--generate genera un fichero de destinos para prefijos de archivo.
+
+		Si no está activada mueve al directorio indicado en fichero_cache los ficheros file1 ... según el prefijo de su nombre.
+
+		El prefijo es la parte entre paréntesis de la siguiente expresión regular:
+		> ([a-z_])_[0-9].* a 
 
 	* Opciones
 		- -h, --help		:: Print this help and exit
 		- -v, --verbose		:: Print script debug info
-		- -e, --elegidos	:: Lista de etiquetas elegidas separadas por comas (sin espacios).
-		- -f, --prefijo	''prefijo'' :: Prefijo que se añade a los seleccionados en el listado de fzf. :: Por defecto es ''$prefijo_defecto''.
-		- -p, --preview ''comando'' :: Comando que se usará para previsualizar la opción elegida.
+		- -g, --generate	:: Genera el fichero de caché
+		- -c, --cache_file	:: Fichero de caché que indica a dónde irán los ficheros.
 EOF
 	exit
 }
@@ -58,29 +62,17 @@ die() {
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-	elegidos=''
-	prefijo=$prefijo_defecto
-	opcion_comando=''
-	opcion_preview=''
+	generate=0
+	cache_file="~/.auto_clasifica"
 
 	while :; do
 		case "${1-}" in
 		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-		-e | --elegidos) # example named parameter
-			set -x
-			elegidos="${2-}"
-			set +x
-			shift
-			;;
-		-f | --prefijo) 
-			prefijo="${2-}"
-			shift
-			;;
-		-p | --preview) 
-			opcion_comando="--preview"
-			opcion_preview='echo {} | sed "s/'$prefijo'//" | '"${2-}"
+		-g | --generate) generate=1 ;; 
+		-c | --cache_file) # example named parameter
+			cache_file="${2-}"
 			shift
 			;;
 		-?*) die "Unknown option: $1" ;;
@@ -92,7 +84,9 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+	[[ -d "$cache_file" ]] || mkdir "$cache_file"
+	[[ -z "${cache_file-}" ]] && die "Missing required parameter: cache_file"
+	[[ ${#args[@]} -eq 0 ]] && die "Es necesario indicar parámetros"
 
 	return 0
 }
@@ -102,39 +96,22 @@ parse_params "$@"
 setup_colors
 
 # script logic here
-IFS=","
-elegidos_arr=($elegidos)
-opciones=("${args[@]}")
-# Me quedo con los argumentos que no estén elegidos
-for elegido in ${elegidos_arr[@]}; do
-	declare -a tmp=()
-	for opcion in ${opciones[@]}; do
-		if [ $opcion != $elegido ]; then
-			tmp+=($opcion)
-		fi
+if [ "$generate" -eq "1" ]; then
+	# genera
+	for d in "${args[@]}"; do
+		[ -d "$d" ] || die "$d no es un directorio"
+		for f in $(find $d -maxdepth 1 -type f); do
+			basename "$f"
+			prefijo=$(basename "$f" | sed "s/^\([a-z_]*\)_[0-9].*/\1/")
+			if [ "$prefijo" != "$(basename "$f")" ]; then
+				echo "$prefijo	$d" 
+			fi
+		done
+	done | sort | uniq > "$cache_file"
+else
+	# clasifica
+	for f in "${args[@]}"; do
+		[ -f "$f" ] || die "$f no es un fichero"
 	done
-	opciones=("${tmp[@]}")
-done
-opciones_totales=$( (for i in ${elegidos_arr[@]} ; do echo $prefijo$i; done; for i in ${opciones[@]}; do echo $i; done ) | fzf --multi $opcion_comando $opcion_preview )
+fi
 
-declare -a a_eliminar=()
-IFS=$'\n'
-for fzflegido in $opciones_totales ; do 
-	if [[ "$fzflegido" =~ ^$prefijo.* ]]; then
-		a_eliminar+=($fzflegido)
-	else
-		echo $fzflegido
-	fi
-done
-for i in "${elegidos_arr[@]}"; do
-	encontrado=''
-	for j in "${a_eliminar[@]}";do
-		j=$(echo $j | sed "s/^$prefijo//");
-		if [ $i == $j ]; then
-			encontrado=1;
-		fi
-	done
-	if [ ! "$encontrado" ]; then
-		echo $i; 
-	fi
-done

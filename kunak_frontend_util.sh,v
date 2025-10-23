@@ -1,0 +1,289 @@
+head	1.1;
+access;
+symbols;
+locks
+	felix:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2025.03.19.12.15.12;	author felix;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@#!/usr/bin/env bash
+
+set -Eeuo pipefail
+trap cleanup SIGINT SIGTERM ERR EXIT
+
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
+basename=$(basename "${BASH_SOURCE[0]}") 
+ksdf=~/.kunak_selected_device
+ksef=~/.kunak_selected_element
+ktagsf=~/.kunak_tags
+rel=/mnt/scada/SAIHEBRO/Wapl/CEF/Kunak/Kunak.rel
+
+#-------------------------------------------------------------------------------
+usage() {
+#-------------------------------------------------------------------------------
+	cat <<EOF
+* $basename
+	* Uso
+		> $basename [-h] [-v] [-f] [ -e element ] [ -d device ] orden
+
+	* Descipción
+		Script description here.
+
+	* Opciones
+		- -h, --help		:: Print this help and exit
+		- -v, --verbose		:: Print script debug info
+		- -D, --dry-run		:: No ejecuta las sentencias sql, solo las saca por salida estándar.
+		- -d, --device ''device'' :: Indica el device_serial_number del dispositivo.
+		- -e, --element ''id'' :: Indica el identificador ''id'' del elemento.
+		- -t, --tag-remota ''tag'' :: Tag de la remota. :: Se usa cuando de añade el tag de comunicación y como filtro del ffichero de tags.
+		- -n, --numero_valores ''cantidad'' :: Cantidad de valores que se leen con la orden ''valores''
+	
+	* Órdenes
+		- et | edit_tags		:: Edita el fichero de tags
+		- rt | read_tags		:: Lee los tags de las señales de la base de datos cheintr. :: Los nombres de las remotas se indican con la opción --tag-remota separados por comas.
+		- rtr | read_tags_rel		:: Lee los tags de las señales del fichero $rel. :: La opción --tag-remota solo tiene que ir un código de remota.
+		- ct | cat_tags		:: Saca por salida estándar el fichero de tags.
+		- lsd | ls_devices		:: Saca un listado de todos los ''devices
+		- lse | ls_elements		:: Saca un listado de los ''elements'' del ''device'' seleccionado
+		- lstd | ls_traspasos_device	:: Saca un listado de los traspasos asociados a un ''device''
+		- lste | ls_traspasos_element	:: Saca un listado de los traspasos asociados a un ''device'' y a un ''element''.
+		- ac | add_comm :: Añade un tag de comunicación al dispositivo seleccionado.
+		- it | insert_traspaso :: Añade un traspaso para un elemento de un dispositivo.
+		- v | valores :: Saca los últimos valores leídos
+		- i | info_selected				:: Saca la información de los elementos seleccionados (en los ficheros $ksdf y $ksef), así como sus traspasos asociados.
+		- u | unselect					:: Borra los ficheros de selección de ''device'' y ''element''.
+		- sd | select_device			:: Selecciona interactivamente un dispositivo de entre todos los que hay en la base de datos. :: Lo guarda en el fichero $ksdf.
+		- se | select_element			:: Selecciona interactivamente un elemento del dispositivo elegidoe. :: Lo guarda en el fichero $ksef.
+		- csv | valores-csv			:: Saca un los valores de un dispositivo y un elemento seleccionado.
+		- plot						:: Saca una gráfica con los dos últimos días.
+		- rel						:: Hace un cat del fichero $rel
+
+	* Ficheros 
+		- fichero de device :: $ksdf
+		- fichero de element :: $ksef
+		- fichero de tags :: $ktagsf
+EOF
+	exit
+}
+#------------------------------------------------------------------------------- 
+# SQL comu
+# UPDATE `kunak_on_premises`.`device` SET `remota_tag` = 'A373', `comm_tag_saih` = 'A373KD01COMU', `prefijo` = 'Kunak' WHERE (`serial_number` = '0523240017');
+# sql senales
+# INSERT INTO `kunak_on_premises`.`traspasos` (`device_serial_number`, `element_id`, `traspasar`, `tag_saih`, `date`, `prefijo`, `tipo`, `periodo`) VALUES ('523240017', 'nivel rio', '1', 'A373K01NRIO1', '2023-07-12 12:59:20', 'Kunak', 'A', '15');
+# INSERT INTO `kunak_on_premises`.`traspasos` (`device_serial_number`, `element_id`, `traspasar`, `tag_saih`, `date`, `prefijo`, `tipo`, `periodo`) VALUES ('523240017', 'Battery', '1', 'A373K02VOLTI', '2023-07-12 12:59:20', 'Kunak', 'A', '15');
+# INSERT INTO `kunak_on_premises`.`traspasos` (`device_serial_number`, `element_id`, `traspasar`, `tag_saih`, `date`, `prefijo`, `tipo`, `periodo`) VALUES ('523240017', 'Temp', '1', 'A373K03TEMPI', '2023-07-12 12:59:20', 'Kunak', 'A', '15');
+# INSERT INTO `kunak_on_premises`.`traspasos` (`device_serial_number`, `element_id`, `traspasar`, `tag_saih`, `date`, `prefijo`, `tipo`, `tipo_calculo`, `tag_saih_calculado`, `periodo`) VALUES ('523240017', 'PLUVIO 01', '1', 'A373K61PCINC', '2023-07-12 12:59:20', 'Kunak', 'A', 'cinc_a_quin', 'A373K85PQUIN', '5');
+
+#------------------------------------------------------------------------------- 
+cleanup() {
+#-------------------------------------------------------------------------------
+	trap - SIGINT SIGTERM ERR EXIT
+	# script cleanup here
+}
+#------------------------------------------------------------------------------- 
+setup_colors() {
+#-------------------------------------------------------------------------------
+	if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
+		NOFORMAT='\033[0m' RED='\033[0;31m' GREEN='\033[0;32m' ORANGE='\033[0;33m' BLUE='\033[0;34m' PURPLE='\033[0;35m' CYAN='\033[0;36m' YELLOW='\033[1;33m'
+	else
+		NOFORMAT='' RED='' GREEN='' ORANGE='' BLUE='' PURPLE='' CYAN='' YELLOW=''
+	fi
+}
+#------------------------------------------------------------------------------- 
+msg() {
+#-------------------------------------------------------------------------------
+	echo >&2 -e "${1-}"
+}
+#------------------------------------------------------------------------------- 
+die() {
+#-------------------------------------------------------------------------------
+	local msg=$1
+	local code=${2-1} # default exit status 1
+	msg "$msg"
+	exit "$code"
+}
+#------------------------------------------------------------------------------- 
+parse_params() {
+#-------------------------------------------------------------------------------
+	# default values of variables set from params
+	device=''
+	element=''
+	dryrun=''
+	tag_remota=''
+	numero_valores=20
+
+	while :; do
+		case "${1-}" in
+		-h | --help) usage ;;
+		-v | --verbose) set -x ;;
+		--no-color) NO_COLOR=1 ;;
+		-D | --dry-run) dryrun=1;;
+		-d | --device) device="${2-}"; shift ;;
+		-e | --element) element="${2-}"; shift ;;
+		-t | --tag-remota) tag_remota="${2-}"; shift ;;
+		-n | --numero-valores) numero_valores="${2-}"; shift;;
+		-?*) die "Unknown option: $1" ;;
+		*) break ;;
+		esac
+		shift
+	done
+
+	if [ -z $device ]; then
+		[ -e $ksdf ] && device=$(cut -f1 $ksdf);
+	fi
+	if [ -z $element ]; then
+		[ -e $ksef ] && element=$(cut -f2 $ksef);
+	fi
+
+	args=("$@@")
+
+	# check required params and arguments
+	[[ ${#args[@@]} -eq 0 ]] && die "Missing script arguments"
+
+	return 0
+}
+#-------------------------------------------------------------------------------
+executesql() {
+#-------------------------------------------------------------------------------
+	sql="$1"
+	if [ -z $dryrun ]; then
+		echo "$sql" | mysql --login-path=Kunak --batch kunak_on_premises
+	else
+		echo "$sql";
+	fi
+}
+#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 
+parse_params "$@@"
+setup_colors
+
+# script logic here
+for orden in "${args[@@]}"; do
+	case "$orden" in
+		lsd|ls_devices) 
+			where='';
+			#[ -z $device ] || where="WHERE serial_number=$device"
+			sql="SELECT * from device $where order by registration_date DESC";
+			executesql "$sql"
+			;;
+		lse|ls_elements) 
+			where='';
+			[ -z $device ] || where="WHERE device_serial_number=$device"
+			sql="SELECT * from element $where";
+			executesql "$sql"
+			;;
+		lstd|ls_traspasos_device)
+			sql="SELECT * FROM traspasos where device_serial_number='$device'";
+			executesql "$sql"
+			;;
+		lste|ls_traspasos_element)
+			sql="SELECT * FROM traspasos where device_serial_number='$device' AND element_id='$element'";
+			executesql "$sql"
+			;;
+		v|valores)
+			sql="SELECT * from \`read\` where device_serial_number='$device' and element_id='$element' order by date desc limit $numero_valores";
+			executesql "$sql" 
+			;;
+		plot)
+			inicio=$(date -d "today -2 days" +"%Y-%m-%d %H:%M:%S")
+			sql="SELECT * from \`read\` where device_serial_number='$device' and element_id='$element' and date>'$inicio' order by date asc";
+			executesql "$sql" | cut -f4 | tail +2 | youplot line -w 80 2>&1
+			#echo $(executesql "$sql" | cut -f4 )
+			;;
+		csv|fichero-csv)
+			sql="SELECT * from \`read\` where device_serial_number='$device' and element_id='$element' order by date desc";
+			executesql "$sql" 
+			;;
+		i|info_selected)
+			#for i in $ksdf $ksef $ktagsf; do
+			for i in $ksdf $ksef; do
+				[ -e $i ] && (echo === $i ===; cat $i.tsv | batcat --language tsv --force-colorization --style grid) || echo "No esiste $i";
+			done
+			for i in ls_traspasos_device ls_traspasos_element ; do
+				echo "=== $i ===";
+				$basename $i | batcat --language tsv --force-colorization --style grid
+			done
+			$basename plot
+			echo "=== valores ===";
+				$basename --numero-valores $numero_valores valores| batcat --language tsv --force-colorization --style grid
+			;;
+		u|unselect)
+			for i in $ksdf $ksef; do
+				[ -e $i ] && rm -f $i; 
+			done
+			;;
+		sd|select_device)
+			sdtemp=$(mktemp)
+			$basename ls_devices | fzf > $sdtemp
+			mv $sdtemp $ksdf
+			($basename ls_devices | head -n1; cat $ksdf ) > ${ksdf}.tsv
+			;;
+		se|select_element)
+			setemp=$(mktemp)
+			$basename ls_elements | fzf > $setemp
+			mv $setemp $ksef
+			( $basename ls_elements | head -n1 ; cat $ksef ) > ${ksef}.tsv
+			;;
+		et| edit_tags) 
+			vi $ktagsf; 
+			cp $ktagsf $ktagsf.tsv;
+			;;
+		rt | read_tags)
+			[ -z $tag_remota ] && die "Para leer los tags de las señales hay que indicar la remota o remotas"
+			remotas="'$(echo $tag_remota | sed "s/,/','/g")'"
+			echo "SELECT LS_TAG_TXT FROM lista_senales where ls_remota_txt in ($remotas)" \
+			| isql -b -d, CHEINTR cheintr cheintr \
+			| tee $ktagsf 
+			;;
+		rtr | read_tags_rel)
+			if [ -z $tag_remota ]; then
+				cut -f2 -d\; $rel
+			else
+				cut -f2 -d\; $rel | grep $tag_remota
+			fi \
+			| tee $ktagsf 
+			;;
+		ct| cat_tags) 
+			cat $ktagsf; 
+			;;
+		it|insert_traspaso)
+			tag=$(cat $ktagsf| grep "^$tag_remota" | fzf);
+			fecha=$(d=$(date +"%Y-%m-%d");d=$(date -d "$d +1 day" +"%Y-%m-%d");for i in $(seq 20); do d=$(date +"%Y-%m-%d" -d "$d -3 days"); echo "$d 00:00:00"; done | fzf ); 
+			tipo=$( (echo A; echo D) | fzf);
+			sql="INSERT INTO traspasos (device_serial_number, element_id, traspasar, tag_saih, date, prefijo, tipo) VALUES ('$device', '$element', 1, '$tag', '$fecha', 'Kunak', '$tipo')";
+			executesql "$sql"
+			;;
+		ac|add_comm)
+			tag=$(grep COMU $ktagsf| fzf --filter "$tag_remota" | fzf );
+			[ -z "$tag" ] && die "No se ha seleccionado ninguna etiqueta."
+			[ -z "$device" ] && die "No se ha seleccionado ningún dispositivo. Use " 
+			sql="UPDATE device SET remota_tag='$tag_remota', comm_tag_saih='$tag', prefijo='Kunak' WHERE serial_number=$device";
+			executesql "$sql"
+			;;
+		rel) 
+			if [ -z $tag_remota ]; then
+				cut -f2 -d\; $rel
+			else
+				cut -f2 -d\; $rel | grep $tag_remota
+			fi
+			;;
+		*) echo "Orden ($orden) desconocida" >&2; exit 2;;
+	esac;
+done
+
+@
