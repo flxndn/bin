@@ -1,1 +1,0 @@
-/home/felix/Documentos/personal/bibliotranstornado/catalogo_git/bin/cloudinary_get_image_info.py
