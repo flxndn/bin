@@ -115,7 +115,3 @@ else
 	done
 fi
 
-msg "${RED}Read parameters:${NOFORMAT}"
-msg "- generate: ${generate}"
-msg "- cache_file: ${cache_file}"
-msg "- arguments: ${args[*]-}"
