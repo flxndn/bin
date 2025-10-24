@@ -11,7 +11,6 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 #-------------------------------------------------------------------------------
 usage() {
 #-------------------------------------------------------------------------------
-<<<<<<<< HEAD:splitcat.sh
 	cat <<EOF
 * $(basename "${BASH_SOURCE[0]}") 
 	* Uso
@@ -31,33 +30,6 @@ EOF
 	exit
 }
 #------------------------------------------------------------------------------- 
-========
-	nombre=$(basename "${BASH_SOURCE[0]}") 
-	cat << HELPEND
-* $nombre
-	* Uso
-		> $nombre [opciones] -d ''fichero_descripcion.txt'' img1 [img2 ... imgn]
-		> $nombre -h|--help
-
-	* Opciones
-		* -h | --help :: Muestra esta ayuda.
-		* -d | --descripcion ''fichero_descripcion.txt'' :: Usa la descripción de las imágenes que hay en el 
-		* -v | --verbose :: Saca la información de depuración por la salida de error estándar.
-		* -a | --autororate :: Rota automticamente las imágenes según la información exif.
-		* -n | --dry-run :: Simula el proceso pero sin enviar los archivo.
-		* -f | --folder ''carpeta'' :: Subcarpeta donde se guarda en cloudlinary.
-	
-	* Descripción
-		Las imágenes se guardan en cloudinary en el directorio ''carpeta''.
-
-		Como entrada tiene un fichero en el que la primera columna están los 
-		nombres de las imágenes y en la segunda columna está la descripción 
-		de la imagen.
-
-HELPEND
-}
-#-------------------------------------------------------------------------------
->>>>>>>> 9cdf448e9476026de23a33dfb321d637a66c9ed5:cloudinary_sube_directorio.sh
 cleanup() {
 #-------------------------------------------------------------------------------
 	trap - SIGINT SIGTERM ERR EXIT
@@ -90,20 +62,12 @@ die() {
 parse_params() {
 #-------------------------------------------------------------------------------
 	# default values of variables set from params
-<<<<<<<< HEAD:splitcat.sh
-========
-	dryrun=0
-	autororate=0
-	fichero_descripcion=''
-	folder=
->>>>>>>> 9cdf448e9476026de23a33dfb321d637a66c9ed5:cloudinary_sube_directorio.sh
 
 	while :; do
 		case "${1-}" in
-		-h | --help) usage; exit 0 ;;
+		-h | --help) usage ;;
 		-v | --verbose) set -x ;;
 		--no-color) NO_COLOR=1 ;;
-<<<<<<<< HEAD:splitcat.sh
 		-p | --parte) # example named parameter
 			part="${2-}"
 			shift
@@ -112,12 +76,6 @@ parse_params() {
 			parts="${2-}"
 			shift
 			;;
-========
-		-a | --autororate) autororate=1 ;; 
-		-f | --folder) folder="${2-}"; shift ;;
-		-n | --dry-run) dryrun=1 ;; 
-		-d | --descripcion) fichero_descripcion="${2-}"; shift ;;
->>>>>>>> 9cdf448e9476026de23a33dfb321d637a66c9ed5:cloudinary_sube_directorio.sh
 		-?*) die "Unknown option: $1" ;;
 		*) break ;;
 		esac
@@ -127,13 +85,6 @@ parse_params() {
 	args=("$@")
 
 	# check required params and arguments
-<<<<<<<< HEAD:splitcat.sh
-========
-	[[ -z "${fichero_descripcion-}" ]] && die "Missing required parameter: fichero_descripcion"
-	[[ -z "${folder-}" ]] && die "Missing required parameter: folder"
-	[[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
-
->>>>>>>> 9cdf448e9476026de23a33dfb321d637a66c9ed5:cloudinary_sube_directorio.sh
 	return 0
 }
 #-------------------------------------------------------------------------------
@@ -142,34 +93,9 @@ parse_params "$@"
 setup_colors
 
 # script logic here
-<<<<<<<< HEAD:splitcat.sh
 tmp=$(mktemp);
 cat > $tmp
 lineas=$(cat $tmp | wc -l)
 tamano=$((lineas/parts))
 inicio=$(( (part-1)*tamano +  1 ))
 tail -n +$inicio $tmp | head -n $tamano
-========
-
-for img in ${args[@]}; do
-	[ $autororate -eq 1 ] && exiftool -q -Orientation= -overwrite_original $img
-	#[ $folder = "" ] && folder=$(basename $(dirname $(realpath $img)))
-	basename="$(basename $img)"
-	titulo="$(grep '^'"$basename"$'\t' "$fichero_descripcion" | cut -f2-)"
-	if [ $dryrun -eq 0 ]; then
-		cloudinary_upload.sh \
-			--folder $folder \
-			--public_id "${basename%.*}" \
-			--title "$titulo" \
-			--miniature \
-			"$basename" > "$basename.json";
-	else
-		echo cloudinary_upload.sh \
-			--folder $folder \
-			--public_id "${basename%.*}" \
-			--title "$titulo" \
-			--miniature \
-			"$basename";
-	fi
-done 
->>>>>>>> 9cdf448e9476026de23a33dfb321d637a66c9ed5:cloudinary_sube_directorio.sh

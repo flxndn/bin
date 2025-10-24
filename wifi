@@ -3,6 +3,10 @@ set -e
 set -u
 
 OSX_AIRPORT='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
+if [ ! -e $OSX_AIRPORT ]; then
+	echo "Esta aplicación no funciona en este dispositivo." >&2
+	exit 1
+fi
 RFKILL='sudo /usr/sbin/rfkill'
 
 is_wifi_enabled() {
