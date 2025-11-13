@@ -70,7 +70,6 @@ while [ "x$1" != "x" ]; do
 	fi
 	if [ "x$1" = "x-d" ] || [ "x$1" = "x--dict" ]; then
 		for d in $(find . -name \*.rel);do
-			set -x
 			destino="$dir_dict/$(basename $d)";
 			if [ ! -e $destino ]; then
 				mv -v $d $dir_dict;
