@@ -22,6 +22,7 @@ usage() {
 		- -f, --flag      :: Some flag description
 		- -d, --date ''fecha''	:: Solo saca los ficheros de esa fecha. :: Formato 20220730
 		- -t, --today	:: Solo saca los ficheros de hoy.
+		- -f, --solo-ficheros	:: Solo saca el segundo campo, los ficheros.
 		- -T, --tail ''cantidad''	:: Solo saca los últimos ''cantidad'' ficheros.
 EOF
   exit
@@ -66,12 +67,14 @@ parse_params() {
   flag=0
   fecha=''
   cantidad=''
+  soloficheros=''
 
   while :; do
     case "${1-}" in
     -h | --help) usage ;;
     -v | --verbose) set -x ;;
     --no-color) NO_COLOR=1 ;;
+    -f|--solo-ficheros) soloficheros=1 ;;
     -d | --date)
       fecha="${2-}"
       shift
@@ -100,4 +103,6 @@ setup_colors
 
 # script logic here
 
-grep "$fecha" .qiv.log | { if [ -z $cantidad ]; then cat ; else tail -n $cantidad; fi } | cut -f2
+grep "$fecha" .qiv.log \
+| { if [ -z $cantidad ]; then cat ; else tail -n $cantidad; fi } \
+| { if [ -z $soloficheros ]; then cat ; else cut -f2; fi } 

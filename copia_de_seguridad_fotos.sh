@@ -49,5 +49,5 @@ for i in $carpeta_imagenes $fichero_configuracion; do
 #for i in  $fichero_configuracion; do
 	echo $i
 	#rsync --dry-run -avt $i/ $out/$i
-	rsync -avt $in/$i/ $out/$i
+	rsync -avt "$in/$i/" "$out/$i"
 done
