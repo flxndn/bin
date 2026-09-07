@@ -1,6 +1,6 @@
 #!/bin/bash
 in=/home/felix
-out=/media/felix/Elements/personal
+out=/run/media/felix/Elements\ SE
 carpeta_imagenes=Fotos
 fichero_configuracion=.local/share/shotwell
 
@@ -30,8 +30,8 @@ if [ "x$1" = "x-o" ]; then
 fi
 
 if [ "$1" = "-t" ]; then
-	for i in $in $in/$carpeta_imagenes $out; do
-		if [ ! -d $i ]; then
+	for i in $in $in/$carpeta_imagenes "$out"; do
+		if [ ! -d "$i" ]; then
 			echo "El directorio $i no existe" >&2;
 			exit 1
 		fi
@@ -48,6 +48,6 @@ fi
 for i in $carpeta_imagenes $fichero_configuracion; do
 #for i in  $fichero_configuracion; do
 	echo $i
-	#rsync --dry-run -avt $i/ $out/$i
+	#rsync --dry-run -avt $i/ "$out/$i"
 	rsync -avt "$in/$i/" "$out/$i"
 done
