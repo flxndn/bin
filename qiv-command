@@ -1,39 +1,68 @@
 #!/bin/bash
 ### syntax: qiv-command [pushed_number] [image_filename_with_full_path]
+ficheroEstado=~/.qivcommand.status
+ficheroLog=~/.qivcommand.log
+#-------------------------------------------------------------------------------
+log(){
+#-------------------------------------------------------------------------------
+	echo "$1" >> $ficheroLog
+}
 #-------------------------------------------------------------------------------
 bck(){
 #-------------------------------------------------------------------------------
 	file="$1"
-	cp "$1" "$1.back"
+	#cp "$1" "$1.back"
+	back_fichero.sh "$file"
 }
 #-------------------------------------------------------------------------------
 ubck(){
 #-------------------------------------------------------------------------------
-	back="$1.back"
+	#back="$1.back"
+	#file="$1"
+	#if [ -e "$back" ]; then
+		#tmp=$(mktemp)
+		#mv "$file" "$tmp"
+		#mv "$back" "$file"
+		#mv "$tmp" "$back"
+	#else
+		#echo "El fichero $2 no tiene copia de seguridad"
+	#fi
 	file="$1"
-	if [ -e "$back" ]; then
-		tmp=$(mktemp)
-		mv "$file" "$tmp"
-		mv "$back" "$file"
-		mv "$tmp" "$back"
-	else
-		echo "El fichero $2 no tiene copia de seguridad"
-	fi
+	back_fichero.sh --restore "$file"
 }
 #-------------------------------------------------------------------------------
 tiempo=$(date +%Y%m%d%H%M%S)
-case $1 in
-  0) ubck "$2";exit;;
-  1) echo "$tiempo	$2	1" >> .qiv.log; exit;;
-  2) echo "$tiempo	$2	2" >> .qiv.log; exit;;
-  3) echo "$tiempo	$2	3" >> .qiv.log; exit;;
-  4) echo "$tiempo	$2	4" >> .qiv.log; exit;;
-  5) jhead "$2";exit;;
-  6) gvim "$2.txt"; exit;;
-  7) bck "$2"; mogrify -rotate "-90" "$2"; exit;;
-  8) bck "$2"; mogrify -rotate "90" "$2"; exit;;
-  9) bck "$2"; mogrify -normalize "$2"; exit;;
-  *) echo "Pulse una tecla del 0 al 9"; exit ;;
-esac
+log "$1 $2"
+if [ -e $ficheroEstado ] && [ "$(cat $ficheroEstado)" = "$2" ]; then
+	log "modo 2"
+	case $1 in
+	  0) ubck "$2";exit;;
+	  1) bck "$2";  mogrify -gravity East  -crop 90%x0 "$2"; exit;; 
+	  2) bck "$2"; mogrify -gravity South -crop 0x90% "$2"; exit;; 
+	  3) bck "$2"; mogrify -gravity West  -crop 90%x0 "$2"; exit;; 
+	  4) bck "$2"; mogrify -gravity North -crop 0x90% "$2"; exit;; 
+	  5) echo -n "" > $ficheroEstado; exit;;
+	  #6) bck "$2"; mogrify -resize 1600x900 "$2"; exit;;
+	  #7) bck "$2"; mogrify -rotate "90" "$2"; exit;;
+	  #8) bck "$2"; mogrify -brightness-contrast "10x10" "$2"; exit;;
+	  9) c=0; d="${2%.jpg}.$c.jpg"; while [ -e "$d" ]; do c=$((c+1)); d="${2%.jpg}.$c.jpg"; done; log "$2 $d"; cp "$2" "$d"; exit;;
+	  *) echo "Pulse una tecla del 0 al 9"; exit ;;
+	esac
+else
+	case $1 in
+	  0) ubck "$2";exit;;
+	  1) echo "$tiempo	$2	1" >> .qiv.log; exit;;
+	  2) echo "$tiempo	$2	2" >> .qiv.log; exit;;
+	  3) echo "$tiempo	$2	3" >> .qiv.log; exit;;
+	  4) echo "$tiempo	$2	4" >> .qiv.log; exit;;
+	  5) echo "$2" > $ficheroEstado; exit;;
+	  #6) bck "$2"; mogrify -resize 1600x900 "$2"; exit;;
+	  7) bck "$2"; mogrify -rotate "90" "$2"; exit;;
+	  8) bck "$2"; mogrify -brightness-contrast "10x10" "$2"; exit;;
+	  9) bck "$2"; mogrify -normalize "$2"; exit;;
+	  *) echo "Pulse una tecla del 0 al 9"; exit ;;
+	esac
+fi
  
+log "fin comando"
 
