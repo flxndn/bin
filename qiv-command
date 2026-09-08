@@ -42,7 +42,7 @@ if [ -e $ficheroEstado ] && [ "$(cat $ficheroEstado)" = "$2" ]; then
 	  3) bck "$2"; mogrify -gravity West  -crop 90%x0 "$2"; exit;; 
 	  4) bck "$2"; mogrify -gravity North -crop 0x90% "$2"; exit;; 
 	  5) echo -n "" > $ficheroEstado; exit;;
-	  #6) bck "$2"; mogrify -resize 1600x900 "$2"; exit;;
+	  6) bck "$2"; mogrify -resize 1600x900 "$2"; exit;;
 	  #7) bck "$2"; mogrify -rotate "90" "$2"; exit;;
 	  #8) bck "$2"; mogrify -brightness-contrast "10x10" "$2"; exit;;
 	  9) c=0; d="${2%.jpg}.$c.jpg"; while [ -e "$d" ]; do c=$((c+1)); d="${2%.jpg}.$c.jpg"; done; log "$2 $d"; cp "$2" "$d"; exit;;
